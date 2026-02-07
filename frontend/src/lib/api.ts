@@ -57,18 +57,19 @@ async function request<T>(
     return { data: res as unknown as T, error: null }
   }
 
-  const body = await res.json() as ApiResponse<T> & { error?: { code?: string; message?: string; details?: Record<string, unknown> } }
+  const body = await res.json() as Record<string, unknown>
+  const error = body.error as { code?: string; message?: string; details?: Record<string, unknown> } | null
 
-  if (!res.ok || body.error) {
+  if (!res.ok || error) {
     throw new ApiError(
-      body.error?.message ?? 'Erreur inconnue',
+      error?.message ?? 'Erreur inconnue',
       res.status,
-      body.error?.code,
-      body.error?.details as Record<string, unknown> | undefined,
+      error?.code,
+      error?.details,
     )
   }
 
-  return body
+  return body as unknown as ApiResponse<T>
 }
 
 /** Exécute une requête avec upload FormData (sans Content-Type JSON) */
@@ -89,18 +90,19 @@ async function upload<T>(
     body: formData,
   })
 
-  const body = await res.json() as ApiResponse<T> & { error?: { code?: string; message?: string; details?: Record<string, unknown> } }
+  const body = await res.json() as Record<string, unknown>
+  const error = body.error as { code?: string; message?: string; details?: Record<string, unknown> } | null
 
-  if (!res.ok || body.error) {
+  if (!res.ok || error) {
     throw new ApiError(
-      body.error?.message ?? 'Erreur inconnue',
+      error?.message ?? 'Erreur inconnue',
       res.status,
-      body.error?.code,
-      body.error?.details as Record<string, unknown> | undefined,
+      error?.code,
+      error?.details,
     )
   }
 
-  return body
+  return body as unknown as ApiResponse<T>
 }
 
 /** Télécharge un fichier brut (PDF, CSV) */
@@ -127,7 +129,7 @@ export const api = {
     request<T>(path),
 
   getPage: <T>(path: string) =>
-    request<T[]>(path) as Promise<PaginatedResponse<T>>,
+    request<T[]>(path) as unknown as Promise<PaginatedResponse<T>>,
 
   post: <T>(path: string, data?: unknown) =>
     request<T>(path, {

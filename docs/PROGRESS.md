@@ -10,7 +10,7 @@ Dernière mise à jour : 2026-02-07
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
-| 2     | Frontend (Vue 3)             | 25%        | En cours     |
+| 2     | Frontend (Vue 3)             | 40%        | En cours     |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
 
@@ -111,9 +111,11 @@ Dernière mise à jour : 2026-02-07
 - [x] Page setup (formulaire complet)
 
 ### 2.4 Contacts (Module A) + tests
-- [ ] Liste + recherche
-- [ ] Formulaire création/édition
-- [ ] Fiche détail
+- [x] Store Pinia contacts (CRUD + mapping snake_case → camelCase)
+- [x] Liste + recherche + filtre par type + pagination
+- [x] Formulaire création/édition (ContactForm réutilisable + validation Zod)
+- [x] Fiche détail (lecture + édition inline + suppression)
+- [x] Composant ConfirmDialog réutilisable (Headless UI)
 - [ ] Tests ContactForm
 
 ### 2.5 Documents (Module B) + tests
@@ -186,3 +188,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 1.6 — Génération PDF : documents commerciaux + certificat de cession |
 | 2026-02-07 | Phase 1 terminée — 60 tests backend (auth, pagination, PDF), 112 tests au total |
 | 2026-02-07 | Phase 2.1-2.3 — Scaffolding frontend, layout, auth, setup, 12 routes, build OK |
+| 2026-02-07 | Phase 2.4 — Module Contacts : store, liste paginée, formulaire, détail, ConfirmDialog |

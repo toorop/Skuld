@@ -1,12 +1,55 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useContactsStore } from '@/stores/contacts'
+import { useToast } from '@/composables/useToast'
+import { ApiError } from '@/lib/api'
+import ContactForm from '@/components/ContactForm.vue'
 
 const { t } = useI18n()
+const router = useRouter()
+const store = useContactsStore()
+const toast = useToast()
+
+const loading = ref(false)
+
+async function handleSubmit(data: Record<string, unknown>) {
+  loading.value = true
+  try {
+    const contact = await store.createContact(data)
+    toast.success(t('contacts.saved'))
+    router.push({ name: 'contact-detail', params: { id: contact.id } })
+  } catch (err) {
+    if (err instanceof ApiError) {
+      toast.error(err.message)
+    } else {
+      toast.error(t('common.error'))
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+function handleCancel() {
+  router.push({ name: 'contacts' })
+}
 </script>
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">{{ t('contacts.new') }}</h1>
-    <p class="mt-2 text-sm text-gray-500">Formulaire en construction (Phase 2.4)</p>
+    <div class="mb-6">
+      <button
+        class="text-sm text-gray-500 hover:text-gray-700"
+        @click="handleCancel"
+      >
+        &larr; {{ t('common.back') }}
+      </button>
+      <h1 class="mt-2 text-2xl font-bold text-gray-900">{{ t('contacts.new') }}</h1>
+    </div>
+
+    <div class="rounded-xl bg-white p-6 shadow-sm">
+      <ContactForm :loading="loading" @submit="handleSubmit" @cancel="handleCancel" />
+    </div>
   </div>
 </template>
