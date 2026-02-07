@@ -2,12 +2,11 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "types": ["@cloudflare/workers-types"],
-    "lib": ["ES2022"]
+    "lib": ["ES2022"],
+    "paths": {
+      "@skuld/shared": ["../packages/shared/src"]
+    }
   },
-  "include": ["src"],
-  "references": [
-    { "path": "../packages/shared" }
-  ]
+  "include": ["src"]
 }

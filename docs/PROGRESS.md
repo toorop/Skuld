@@ -9,7 +9,7 @@ Dernière mise à jour : 2026-02-07
 | Phase | Description                  | Avancement | Statut       |
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
-| 1     | Backend (API Hono)           | 0%         | Non commencé |
+| 1     | Backend (API Hono)           | 70%        | En cours     |
 | 2     | Frontend (Vue 3)             | 0%         | Non commencé |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
@@ -49,47 +49,50 @@ Dernière mise à jour : 2026-02-07
 ## Phase 1 — Backend
 
 ### 1.1 Scaffolding
-- [ ] package.json + dépendances
-- [ ] wrangler.toml
-- [ ] Point d'entrée Hono
+- [x] package.json + dépendances
+- [x] wrangler.toml + wrangler.toml.example + .dev.vars.example
+- [x] Point d'entrée Hono (`index.ts` + `types.ts`)
 - [ ] Configuration Vitest (miniflare)
 
-### 1.2 Middleware & tests
-- [ ] Auth JWT
-- [ ] CORS
-- [ ] Client Supabase
-- [ ] Helpers réponse API
-- [ ] Validation Zod
-- [ ] Gestion d'erreurs
+### 1.2 Middleware & utilitaires
+- [x] Auth JWT (`middleware/auth.ts`)
+- [x] CORS (`middleware/cors.ts`)
+- [x] Client Supabase (`lib/supabase.ts`)
+- [x] Helpers réponse API (`lib/response.ts`)
+- [x] Validation Zod (`lib/validation.ts`)
+- [x] Pagination (`lib/pagination.ts`)
+- [x] Gestion d'erreurs (`middleware/error-handler.ts`)
 - [ ] Tests middleware
 
-### 1.3 Routes Settings + tests
-- [ ] CRUD settings (6 routes)
-- [ ] Tests setup, mise à jour, refus double setup
+### 1.3 Routes Settings
+- [x] POST /api/setup — configuration initiale (`routes/setup.ts`)
+- [x] GET/PUT /api/settings, POST logo, GET export, DELETE account (`routes/settings.ts`)
+- [ ] Tests
 
-### 1.4 Routes Contacts + tests
-- [ ] CRUD complet (5 routes)
-- [ ] Tests CRUD, recherche, validation
+### 1.4 Routes Contacts
+- [x] CRUD complet + recherche + protection suppression (`routes/contacts.ts`)
+- [ ] Tests
 
-### 1.5 Routes Documents + tests
-- [ ] CRUD + actions (9 routes)
-- [ ] Tests immutabilité, numérotation, calculs fiscaux, conversion
+### 1.5 Routes Documents
+- [x] CRUD + send/pay/cancel/convert/pdf (9 routes) (`routes/documents.ts`)
+- [ ] Tests
 
-### 1.6 Génération PDF + tests
+### 1.6 Génération PDF
 - [ ] Templates PDF (facture, devis, avoir, certificat cession)
-- [ ] Tests génération et contenu
+- [ ] Stockage R2
+- [ ] Tests
 
-### 1.7 Routes Transactions + tests
-- [ ] CRUD complet (5 routes)
-- [ ] Tests CRUD, création auto proof_bundle
+### 1.7 Routes Transactions
+- [x] CRUD + création auto proof_bundle (`routes/transactions.ts`)
+- [ ] Tests
 
-### 1.8 Routes Preuves + tests
-- [ ] Upload, bundle, download, cession PDF (4 routes)
-- [ ] Tests validation MIME/taille, complétude bundle
+### 1.8 Routes Preuves
+- [x] Upload, bundle, download, cession PDF (`routes/proofs.ts`)
+- [ ] Tests
 
-### 1.9 Routes Dashboard + tests
-- [ ] Totaux URSSAF + export CSV (2 routes)
-- [ ] Tests agrégation, alertes seuils, export CSV
+### 1.9 Routes Dashboard
+- [x] Totaux URSSAF mensuel/trimestriel + alertes seuils + export CSV (`routes/dashboard.ts`)
+- [ ] Tests
 
 ---
 
@@ -184,3 +187,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 0.1 terminée : monorepo, TS, Vitest, .env, .gitignore |
 | 2026-02-07 | Phase 0.2 terminée : types, schémas Zod, constantes, 52 tests |
 | 2026-02-07 | Phase 0.3 terminée : 10 migrations SQL (tables, triggers, RLS, index) |
+| 2026-02-07 | Phase 1 — Routes API : scaffolding, middleware, 7 fichiers routes, 0 erreur TS |

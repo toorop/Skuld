@@ -1,0 +1,14 @@
+name = "skuld-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Renseignées via wrangler secret ou dans .dev.vars pour le dev local
+# SUPABASE_URL = ""
+# SUPABASE_ANON_KEY = ""
+# SUPABASE_SERVICE_ROLE_KEY = ""
+# APP_URL = ""
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "skuld-proofs"

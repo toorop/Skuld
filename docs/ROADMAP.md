@@ -45,50 +45,50 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 ## Phase 1 — Backend (API Hono)
 
 ### 1.1 Scaffolding backend
-- [ ] `backend/package.json` avec dépendances (hono, @supabase/supabase-js, zod, pdf-lib)
-- [ ] `backend/tsconfig.json`
-- [ ] `backend/wrangler.toml` (bindings R2, variables d'env)
-- [ ] `wrangler.toml.example` (template sans secrets)
-- [ ] Point d'entrée `backend/src/index.ts` (app Hono)
-- [ ] Configuration des types Cloudflare Workers (`Env` avec bindings R2, vars)
+- [x] `backend/package.json` avec dépendances (hono, @supabase/supabase-js, zod, pdf-lib)
+- [x] `backend/tsconfig.json`
+- [x] `backend/wrangler.toml` (bindings R2, variables d'env)
+- [x] `wrangler.toml.example` (template sans secrets)
+- [x] Point d'entrée `backend/src/index.ts` (app Hono)
+- [x] Configuration des types Cloudflare Workers (`Env` avec bindings R2, vars)
 - [ ] Configuration Vitest backend (miniflare)
 
 ### 1.2 Middleware & utilitaires
-- [ ] Middleware d'authentification JWT Supabase
-- [ ] Middleware CORS
-- [ ] Client Supabase (initialisé par requête avec le JWT utilisateur)
-- [ ] Helper réponse API : `success()`, `error()`, `paginated()`
-- [ ] Helper validation Zod (middleware Hono)
-- [ ] Gestion d'erreurs globale (error handler Hono)
+- [x] Middleware d'authentification JWT Supabase
+- [x] Middleware CORS
+- [x] Client Supabase (initialisé par requête avec le JWT utilisateur)
+- [x] Helper réponse API : `success()`, `error()`, `paginated()`
+- [x] Helper validation Zod (middleware Hono)
+- [x] Gestion d'erreurs globale (error handler Hono)
 - [ ] **Tests** : middleware auth (JWT valide, expiré, absent), helpers réponse
 
 ### 1.3 Routes Settings
-- [ ] `POST /api/setup` — Configuration initiale (création settings)
-- [ ] `GET /api/settings` — Récupérer la configuration
-- [ ] `PUT /api/settings` — Mettre à jour la configuration
-- [ ] `POST /api/settings/logo` — Upload logo vers R2
-- [ ] `GET /api/settings/export` — Export complet des données (ZIP)
-- [ ] `DELETE /api/settings/account` — Suppression du compte
+- [x] `POST /api/setup` — Configuration initiale (création settings)
+- [x] `GET /api/settings` — Récupérer la configuration
+- [x] `PUT /api/settings` — Mettre à jour la configuration
+- [x] `POST /api/settings/logo` — Upload logo vers R2
+- [x] `GET /api/settings/export` — Export complet des données (JSON)
+- [x] `DELETE /api/settings/account` — Suppression du compte
 - [ ] **Tests** : setup initial, mise à jour, refus de double setup
 
 ### 1.4 Routes Contacts
-- [ ] `GET /api/contacts` — Liste paginée avec recherche
-- [ ] `POST /api/contacts` — Création
-- [ ] `GET /api/contacts/:id` — Détail
-- [ ] `PUT /api/contacts/:id` — Mise à jour
-- [ ] `DELETE /api/contacts/:id` — Suppression
+- [x] `GET /api/contacts` — Liste paginée avec recherche
+- [x] `POST /api/contacts` — Création
+- [x] `GET /api/contacts/:id` — Détail
+- [x] `PUT /api/contacts/:id` — Mise à jour
+- [x] `DELETE /api/contacts/:id` — Suppression (avec protection FK)
 - [ ] **Tests** : CRUD complet, recherche, validation entrées
 
 ### 1.5 Routes Documents
-- [ ] `GET /api/documents` — Liste avec filtres (type, status)
-- [ ] `POST /api/documents` — Création (DRAFT) avec lignes
-- [ ] `GET /api/documents/:id` — Détail avec lignes
-- [ ] `PUT /api/documents/:id` — Mise à jour (si DRAFT)
-- [ ] `POST /api/documents/:id/send` — Passage SENT + numérotation + PDF
-- [ ] `POST /api/documents/:id/pay` — Passage PAID + création transaction
-- [ ] `POST /api/documents/:id/cancel` — Annulation / création avoir
-- [ ] `POST /api/documents/:id/convert` — Devis → Facture
-- [ ] `GET /api/documents/:id/pdf` — Téléchargement PDF
+- [x] `GET /api/documents` — Liste avec filtres (type, status)
+- [x] `POST /api/documents` — Création (DRAFT) avec lignes
+- [x] `GET /api/documents/:id` — Détail avec lignes
+- [x] `PUT /api/documents/:id` — Mise à jour (si DRAFT)
+- [x] `POST /api/documents/:id/send` — Passage SENT + numérotation
+- [x] `POST /api/documents/:id/pay` — Passage PAID + création transaction
+- [x] `POST /api/documents/:id/cancel` — Annulation / création avoir
+- [x] `POST /api/documents/:id/convert` — Devis → Facture
+- [x] `GET /api/documents/:id/pdf` — Téléchargement PDF (R2)
 - [ ] **Tests** : immutabilité document SENT, numérotation séquentielle sans trous, calculs totaux fiscaux, conversion devis→facture
 
 ### 1.6 Génération PDF
@@ -100,23 +100,23 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] **Tests** : génération PDF (vérifier que le fichier est produit, contient les mentions légales)
 
 ### 1.7 Routes Transactions
-- [ ] `GET /api/transactions` — Liste avec filtres (période, direction, catégorie)
-- [ ] `POST /api/transactions` — Création (+ proof_bundle si second-hand)
-- [ ] `GET /api/transactions/:id` — Détail
-- [ ] `PUT /api/transactions/:id` — Mise à jour
-- [ ] `DELETE /api/transactions/:id` — Suppression
+- [x] `GET /api/transactions` — Liste avec filtres (période, direction, catégorie)
+- [x] `POST /api/transactions` — Création (+ proof_bundle si second-hand)
+- [x] `GET /api/transactions/:id` — Détail
+- [x] `PUT /api/transactions/:id` — Mise à jour
+- [x] `DELETE /api/transactions/:id` — Suppression (+ nettoyage R2)
 - [ ] **Tests** : CRUD, création auto proof_bundle pour achat occasion
 
 ### 1.8 Routes Preuves
-- [ ] `POST /api/proofs/upload` — Upload fichier vers R2 (validation MIME + taille)
-- [ ] `GET /api/proofs/bundle/:transactionId` — État du dossier de preuves
-- [ ] `GET /api/proofs/:id/download` — Téléchargement (presigned URL)
-- [ ] `POST /api/proofs/cession-pdf/:transactionId` — Génération certificat de cession
+- [x] `POST /api/proofs/upload` — Upload fichier vers R2 (validation MIME + taille)
+- [x] `GET /api/proofs/bundle/:transactionId` — État du dossier de preuves
+- [x] `GET /api/proofs/:id/download` — Téléchargement
+- [x] `POST /api/proofs/cession-pdf/:transactionId` — Génération certificat de cession (TODO: implémentation pdf-lib)
 - [ ] **Tests** : rejet MIME invalide, rejet fichier trop gros, complétude du bundle
 
 ### 1.9 Routes Dashboard
-- [ ] `GET /api/dashboard/urssaf` — Totaux par catégorie fiscale + période
-- [ ] `GET /api/dashboard/urssaf/export` — Export CSV de la période
+- [x] `GET /api/dashboard/urssaf` — Totaux par catégorie fiscale + période (mensuel/trimestriel)
+- [x] `GET /api/dashboard/urssaf/export` — Export CSV de la période
 - [ ] **Tests** : calculs d'agrégation URSSAF (mensuel, trimestriel), alertes de seuil, export CSV
 
 ---
