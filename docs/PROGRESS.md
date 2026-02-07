@@ -10,7 +10,7 @@ Dernière mise à jour : 2026-02-07
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
-| 2     | Frontend (Vue 3)             | 40%        | En cours     |
+| 2     | Frontend (Vue 3)             | 55%        | En cours     |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
 
@@ -119,11 +119,12 @@ Dernière mise à jour : 2026-02-07
 - [ ] Tests ContactForm
 
 ### 2.5 Documents (Module B) + tests
-- [ ] Liste avec onglets
-- [ ] Formulaire avec éditeur de lignes
-- [ ] Détail + actions
-- [ ] Aperçu PDF
-- [ ] Conversion devis → facture
+- [x] Store Pinia documents (CRUD + send/pay/cancel/convert + mapping)
+- [x] Liste avec onglets (Devis/Factures/Avoirs) + filtre statut + pagination
+- [x] Formulaire avec éditeur de lignes (DocumentLineEditor + sous-totaux par catégorie)
+- [x] DocumentForm réutilisable (sélecteur contact, dates auto, paiement, lignes, options)
+- [x] Détail + actions (envoyer, payer, annuler, convertir, télécharger PDF)
+- [x] Conversion devis → facture + confirmation dialogs
 - [ ] Tests DocumentLineEditor (calculs fiscaux)
 
 ### 2.6 Trésorerie (Module C) + tests
@@ -189,3 +190,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 1 terminée — 60 tests backend (auth, pagination, PDF), 112 tests au total |
 | 2026-02-07 | Phase 2.1-2.3 — Scaffolding frontend, layout, auth, setup, 12 routes, build OK |
 | 2026-02-07 | Phase 2.4 — Module Contacts : store, liste paginée, formulaire, détail, ConfirmDialog |
+| 2026-02-07 | Phase 2.5 — Module Documents : store, liste onglets, éditeur lignes, formulaire, détail + actions |
