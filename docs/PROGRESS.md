@@ -27,10 +27,10 @@ Dernière mise à jour : 2026-02-07
 - [x] .nvmrc
 
 ### 0.2 Package partagé (`packages/shared`)
-- [ ] Types TypeScript (enums, entités, API)
-- [ ] Schémas Zod (settings, contacts, documents, transactions)
-- [ ] Constantes (seuils URSSAF, types MIME, etc.)
-- [ ] Tests validation Zod
+- [x] Types TypeScript (enums, entités, API)
+- [x] Schémas Zod (settings, contacts, documents, transactions)
+- [x] Constantes (seuils URSSAF, types MIME, etc.)
+- [x] Tests validation Zod (52 tests)
 
 ### 0.3 Migrations SQL
 - [ ] Enums
@@ -182,3 +182,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Création de la spécification, CLAUDE.md, README, roadmap  |
 | 2026-02-07 | Ajout stratégie de tests dans chaque phase                |
 | 2026-02-07 | Phase 0.1 terminée : monorepo, TS, Vitest, .env, .gitignore |
+| 2026-02-07 | Phase 0.2 terminée : types, schémas Zod, constantes, 52 tests |

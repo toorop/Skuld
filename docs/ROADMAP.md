@@ -9,24 +9,24 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 ## Phase 0 — Fondations (Monorepo & Infra)
 
 ### 0.1 Structure monorepo
-- [ ] `package.json` racine avec workspaces npm (`frontend`, `backend`, `packages/shared`)
-- [ ] Configuration TypeScript partagée (`tsconfig.base.json` + `tsconfig.json` par workspace)
-- [ ] Configuration Vitest racine
-- [ ] `.env.example` avec toutes les variables documentées
-- [ ] `.gitignore` complet (node_modules, dist, .env, .wrangler)
-- [ ] `.nvmrc` (Node 18+)
+- [x] `package.json` racine avec workspaces npm (`frontend`, `backend`, `packages/shared`)
+- [x] Configuration TypeScript partagée (`tsconfig.base.json` + `tsconfig.json` par workspace)
+- [x] Configuration Vitest racine
+- [x] `.env.example` avec toutes les variables documentées
+- [x] `.gitignore` complet (node_modules, dist, .env, .wrangler)
+- [x] `.nvmrc` (Node 18+)
 
 ### 0.2 Package partagé (`packages/shared`)
-- [ ] `package.json` + `tsconfig.json`
-- [ ] Types TypeScript : enums miroir du SQL (`FiscalCategory`, `DocType`, `DocStatus`, etc.)
-- [ ] Types des entités : `Settings`, `Contact`, `Document`, `DocumentLine`, `Transaction`, `ProofBundle`, `Proof`
-- [ ] Types API : `ApiResponse<T>`, `PaginatedResponse<T>`, `ApiError`
-- [ ] Schémas Zod : validation `Settings` (SIRET, code postal, IBAN)
-- [ ] Schémas Zod : validation `Contact` (email, SIREN optionnel)
-- [ ] Schémas Zod : validation `Document` + `DocumentLine`
-- [ ] Schémas Zod : validation `Transaction`
-- [ ] Constantes : seuils URSSAF, types MIME autorisés, taille max upload
-- [ ] **Tests** : validation Zod (valeurs valides, invalides, cas limites SIRET/IBAN)
+- [x] `package.json` + `tsconfig.json`
+- [x] Types TypeScript : enums miroir du SQL (`FiscalCategory`, `DocType`, `DocStatus`, etc.)
+- [x] Types des entités : `Settings`, `Contact`, `Document`, `DocumentLine`, `Transaction`, `ProofBundle`, `Proof`
+- [x] Types API : `ApiResponse<T>`, `PaginatedResponse<T>`, `ApiError`
+- [x] Schémas Zod : validation `Settings` (SIRET, code postal, IBAN)
+- [x] Schémas Zod : validation `Contact` (email, SIREN optionnel)
+- [x] Schémas Zod : validation `Document` + `DocumentLine`
+- [x] Schémas Zod : validation `Transaction`
+- [x] Constantes : seuils URSSAF, types MIME autorisés, taille max upload
+- [x] **Tests** : validation Zod (valeurs valides, invalides, cas limites SIRET/IBAN)
 
 ### 0.3 Migrations SQL (`supabase/migrations/`)
 - [ ] `00001_enums.sql` — Tous les types ENUM
