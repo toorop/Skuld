@@ -1,0 +1,13 @@
+{
+  "name": "skuld-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Le scaffolding Vue sera fait en Phase 2.1'",
+    "build": "echo 'Le scaffolding Vue sera fait en Phase 2.1'"
+  },
+  "dependencies": {
+    "@skuld/shared": "*"
+  }
+}

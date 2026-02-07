@@ -2,6 +2,8 @@
 
 Plan de développement détaillé, découpé en phases séquentielles. Chaque phase produit un livrable fonctionnel testable.
 
+**Stack de tests :** Vitest partout (compatible Workers + Vue), Playwright pour le E2E.
+
 ---
 
 ## Phase 0 — Fondations (Monorepo & Infra)
@@ -9,6 +11,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 ### 0.1 Structure monorepo
 - [ ] `package.json` racine avec workspaces npm (`frontend`, `backend`, `packages/shared`)
 - [ ] Configuration TypeScript partagée (`tsconfig.base.json` + `tsconfig.json` par workspace)
+- [ ] Configuration Vitest racine
 - [ ] `.env.example` avec toutes les variables documentées
 - [ ] `.gitignore` complet (node_modules, dist, .env, .wrangler)
 - [ ] `.nvmrc` (Node 18+)
@@ -23,6 +26,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Schémas Zod : validation `Document` + `DocumentLine`
 - [ ] Schémas Zod : validation `Transaction`
 - [ ] Constantes : seuils URSSAF, types MIME autorisés, taille max upload
+- [ ] **Tests** : validation Zod (valeurs valides, invalides, cas limites SIRET/IBAN)
 
 ### 0.3 Migrations SQL (`supabase/migrations/`)
 - [ ] `00001_enums.sql` — Tous les types ENUM
@@ -47,6 +51,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] `wrangler.toml.example` (template sans secrets)
 - [ ] Point d'entrée `backend/src/index.ts` (app Hono)
 - [ ] Configuration des types Cloudflare Workers (`Env` avec bindings R2, vars)
+- [ ] Configuration Vitest backend (miniflare)
 
 ### 1.2 Middleware & utilitaires
 - [ ] Middleware d'authentification JWT Supabase
@@ -55,6 +60,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Helper réponse API : `success()`, `error()`, `paginated()`
 - [ ] Helper validation Zod (middleware Hono)
 - [ ] Gestion d'erreurs globale (error handler Hono)
+- [ ] **Tests** : middleware auth (JWT valide, expiré, absent), helpers réponse
 
 ### 1.3 Routes Settings
 - [ ] `POST /api/setup` — Configuration initiale (création settings)
@@ -63,6 +69,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] `POST /api/settings/logo` — Upload logo vers R2
 - [ ] `GET /api/settings/export` — Export complet des données (ZIP)
 - [ ] `DELETE /api/settings/account` — Suppression du compte
+- [ ] **Tests** : setup initial, mise à jour, refus de double setup
 
 ### 1.4 Routes Contacts
 - [ ] `GET /api/contacts` — Liste paginée avec recherche
@@ -70,6 +77,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] `GET /api/contacts/:id` — Détail
 - [ ] `PUT /api/contacts/:id` — Mise à jour
 - [ ] `DELETE /api/contacts/:id` — Suppression
+- [ ] **Tests** : CRUD complet, recherche, validation entrées
 
 ### 1.5 Routes Documents
 - [ ] `GET /api/documents` — Liste avec filtres (type, status)
@@ -81,6 +89,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] `POST /api/documents/:id/cancel` — Annulation / création avoir
 - [ ] `POST /api/documents/:id/convert` — Devis → Facture
 - [ ] `GET /api/documents/:id/pdf` — Téléchargement PDF
+- [ ] **Tests** : immutabilité document SENT, numérotation séquentielle sans trous, calculs totaux fiscaux, conversion devis→facture
 
 ### 1.6 Génération PDF
 - [ ] Template PDF facture (pdf-lib) : en-tête, coordonnées, tableau lignes, totaux, mentions légales
@@ -88,6 +97,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Template PDF avoir
 - [ ] Template PDF certificat de cession (achat occasion)
 - [ ] Stockage du PDF généré dans R2
+- [ ] **Tests** : génération PDF (vérifier que le fichier est produit, contient les mentions légales)
 
 ### 1.7 Routes Transactions
 - [ ] `GET /api/transactions` — Liste avec filtres (période, direction, catégorie)
@@ -95,16 +105,19 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] `GET /api/transactions/:id` — Détail
 - [ ] `PUT /api/transactions/:id` — Mise à jour
 - [ ] `DELETE /api/transactions/:id` — Suppression
+- [ ] **Tests** : CRUD, création auto proof_bundle pour achat occasion
 
 ### 1.8 Routes Preuves
 - [ ] `POST /api/proofs/upload` — Upload fichier vers R2 (validation MIME + taille)
 - [ ] `GET /api/proofs/bundle/:transactionId` — État du dossier de preuves
 - [ ] `GET /api/proofs/:id/download` — Téléchargement (presigned URL)
 - [ ] `POST /api/proofs/cession-pdf/:transactionId` — Génération certificat de cession
+- [ ] **Tests** : rejet MIME invalide, rejet fichier trop gros, complétude du bundle
 
 ### 1.9 Routes Dashboard
 - [ ] `GET /api/dashboard/urssaf` — Totaux par catégorie fiscale + période
 - [ ] `GET /api/dashboard/urssaf/export` — Export CSV de la période
+- [ ] **Tests** : calculs d'agrégation URSSAF (mensuel, trimestriel), alertes de seuil, export CSV
 
 ---
 
@@ -118,6 +131,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Client Supabase (`@supabase/supabase-js`)
 - [ ] Client API (fetch wrapper typé avec intercepteurs auth)
 - [ ] Configuration Vite (proxy dev vers Wrangler)
+- [ ] Configuration Vitest + Vue Test Utils
 
 ### 2.2 Layout & navigation
 - [ ] Layout public (login, setup)
@@ -142,6 +156,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Composant `ContactForm` — Formulaire réutilisable (création/édition)
 - [ ] Store Pinia `contacts`
 - [ ] Validation formulaire avec Zod
+- [ ] **Tests** : composant ContactForm (validation, soumission)
 
 ### 2.5 Documents (Module B)
 - [ ] Page `/app/documents` — Liste avec onglets (Devis / Factures / Avoirs) + filtres status
@@ -156,6 +171,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Bouton conversion Devis → Facture
 - [ ] Modale de confirmation pour les actions irréversibles (envoyer, annuler)
 - [ ] Store Pinia `documents`
+- [ ] **Tests** : DocumentLineEditor (ajout/suppression lignes, calculs totaux par catégorie fiscale)
 
 ### 2.6 Trésorerie (Module C)
 - [ ] Page `/app/transactions` — Liste avec filtres (période, direction, catégorie)
@@ -167,6 +183,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Composant `ProofBundle` — État du dossier de preuves (checklist visuelle)
 - [ ] Bouton génération certificat de cession
 - [ ] Store Pinia `transactions`
+- [ ] **Tests** : ProofUploader (validation fichier), ProofBundle (affichage complétude)
 
 ### 2.7 Dashboard URSSAF (Module D)
 - [ ] Page `/app/dashboard` — Vue principale
@@ -176,6 +193,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Historique des périodes passées (tableau récapitulatif)
 - [ ] Bouton export CSV
 - [ ] Store Pinia `dashboard`
+- [ ] **Tests** : UrsaffTotals (affichage correct des montants, alertes de seuil)
 
 ### 2.8 Paramètres (Module E)
 - [ ] Page `/app/settings` — Formulaire édition profil
@@ -187,37 +205,47 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 
 ---
 
-## Phase 3 — Intégration & Polish
+## Phase 3 — Intégration, E2E & Polish
 
-### 3.1 Intégration frontend ↔ backend
-- [ ] Tester tous les flux complets : setup → contact → devis → facture → paiement → dashboard
-- [ ] Tester le workflow achat occasion complet
+### 3.1 Tests E2E (Playwright)
+- [ ] Setup Playwright + configuration
+- [ ] E2E : inscription + setup initial
+- [ ] E2E : création contact → création devis → conversion facture → marquage payé
+- [ ] E2E : saisie dépense achat occasion → upload preuves → vérification complétude
+- [ ] E2E : vérification dashboard URSSAF (totaux corrects après opérations)
+- [ ] E2E : export CSV
+
+### 3.2 Intégration frontend ↔ backend
 - [ ] Vérifier l'immutabilité des documents envoyés
 - [ ] Vérifier les calculs URSSAF sur des données réalistes
 - [ ] Vérifier la numérotation séquentielle (pas de trous)
 
-### 3.2 PDF
+### 3.3 PDF
 - [ ] Vérifier les factures PDF générées (mentions légales, mise en page)
 - [ ] Vérifier le certificat de cession PDF
 - [ ] Tester l'impression navigateur
 
-### 3.3 Responsive & UX
+### 3.4 Responsive & UX
 - [ ] Responsive mobile (sidebar en drawer, tableaux scrollables)
 - [ ] États vides (aucun contact, aucun document, etc.)
 - [ ] Messages d'erreur explicites en français
 - [ ] Feedback utilisateur sur chaque action (toasts, indicateurs de chargement)
 
-### 3.4 Sécurité
+### 3.5 Sécurité
 - [ ] Vérifier que le RLS bloque bien les accès non authentifiés
 - [ ] Vérifier la validation des uploads (MIME, taille)
 - [ ] Vérifier que les presigned URLs expirent correctement
 - [ ] Vérifier qu'un seul compte peut exister par instance
 
-### 3.5 Documentation
+### 3.6 Documentation
 - [ ] README finalisé avec guide de déploiement pas-à-pas
 - [ ] Captures d'écran dans le README
 - [ ] CONTRIBUTING.md (guide de contribution)
 - [ ] CHANGELOG.md
+
+### 3.7 CI/CD
+- [ ] GitHub Actions : lint + type-check + tests unitaires sur chaque push
+- [ ] GitHub Actions : tests E2E sur les PR
 
 ---
 
@@ -233,5 +261,3 @@ Ces fonctionnalités ne sont **pas** dans le scope du MVP mais sont envisagées 
 - [ ] Mode hors-ligne (Service Worker + cache local)
 - [ ] Application mobile (Capacitor ou PWA)
 - [ ] Thème sombre
-- [ ] Tests automatisés (Vitest + Playwright)
-- [ ] CI/CD GitHub Actions (lint, build, tests)

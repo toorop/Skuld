@@ -1,0 +1,35 @@
+{
+  "name": "skuld",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ERP Light open-source pour auto-entrepreneurs français",
+  "license": "MIT",
+  "workspaces": [
+    "packages/shared",
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces",
+    "build:shared": "npm run build --workspace=@skuld/shared",
+    "build:backend": "npm run build --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "deploy:backend": "npm run deploy --workspace=backend",
+    "deploy:frontend": "npm run deploy --workspace=frontend",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit --project tsconfig.base.json",
+    "check": "npm run lint && npm run test"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
