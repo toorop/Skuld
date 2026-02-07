@@ -124,28 +124,29 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 ## Phase 2 — Frontend (Vue 3)
 
 ### 2.1 Scaffolding frontend
-- [ ] `create-vue` avec TypeScript, Vue Router, Pinia
-- [ ] Tailwind CSS + configuration
-- [ ] Headless UI
-- [ ] Vue I18n (fichier `fr.json` initial)
-- [ ] Client Supabase (`@supabase/supabase-js`)
-- [ ] Client API (fetch wrapper typé avec intercepteurs auth)
-- [ ] Configuration Vite (proxy dev vers Wrangler)
-- [ ] Configuration Vitest + Vue Test Utils
+- [x] `package.json` avec dépendances (Vue 3, Vite, Tailwind, Pinia, Headless UI, vue-i18n, vee-validate)
+- [x] TypeScript : tsconfig.json + tsconfig.app.json + tsconfig.node.json
+- [x] Tailwind CSS + @tailwindcss/forms + PostCSS + couleur primaire
+- [x] Vite : alias `@/`, proxy `/api` → wrangler dev
+- [x] Vue I18n (fichier `fr.json` complet)
+- [x] Client Supabase (`src/lib/supabase.ts`)
+- [x] Client API typé (`src/lib/api.ts` : get, post, put, delete, upload, download)
+- [x] Build production Vite OK (344 Ko gzip 108 Ko)
 
 ### 2.2 Layout & navigation
-- [ ] Layout public (login, setup)
-- [ ] Layout authentifié (sidebar, header, contenu)
-- [ ] Sidebar : Dashboard, Contacts, Documents, Trésorerie, Paramètres
-- [ ] Guard de route : redirection login si non authentifié
-- [ ] Guard de route : redirection setup si settings non configuré
-- [ ] Composant de chargement global
-- [ ] Composant de notification (toast)
+- [x] Layout authentifié (`AuthLayout.vue` : sidebar + header + main)
+- [x] `AppSidebar.vue` — 5 liens avec icônes Heroicons + état actif
+- [x] `AppHeader.vue` — Email utilisateur + bouton déconnexion
+- [x] `AppLoading.vue` — Spinner de chargement global
+- [x] `AppToast.vue` + composable `useToast` — Notifications success/error/info
+- [x] Guards de route : auth (→ login), setup (→ setup), redirections intelligentes
+- [x] Router avec lazy loading (12 routes)
+- [x] Page 404
 
 ### 2.3 Auth & Setup (Module 0)
-- [ ] Page `/login` — Formulaire email/password + magic link
-- [ ] Store Pinia `auth` — Session, login, logout, refresh
-- [ ] Page `/setup` — Formulaire configuration initiale (SIRET, activité, etc.)
+- [x] Page `/login` — Formulaire email/password + magic link
+- [x] Store Pinia `auth` — Session, login, logout, magic link, signUp, checkSetup
+- [x] Page `/setup` — Formulaire complet (SIRET, activité, adresse, banque, déclaration, TVA)
 - [ ] Validation formulaire setup avec VeeValidate + Zod
 
 ### 2.4 Contacts (Module A)

@@ -10,7 +10,7 @@ Dernière mise à jour : 2026-02-07
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
-| 2     | Frontend (Vue 3)             | 0%         | Non commencé |
+| 2     | Frontend (Vue 3)             | 25%        | En cours     |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
 
@@ -93,21 +93,22 @@ Dernière mise à jour : 2026-02-07
 ## Phase 2 — Frontend
 
 ### 2.1 Scaffolding
-- [ ] Vue 3 + Vite + Tailwind + Pinia + Router
-- [ ] Client API typé
-- [ ] Vue I18n
-- [ ] Configuration Vitest + Vue Test Utils
+- [x] Vue 3 + Vite + Tailwind + Pinia + Router + Headless UI + vue-i18n
+- [x] Client API typé (`lib/api.ts`)
+- [x] Client Supabase (`lib/supabase.ts`)
+- [x] i18n FR complet (`fr.json`)
+- [x] Build Vite OK (344 Ko / 108 Ko gzip)
 
 ### 2.2 Layout & Navigation
-- [ ] Layout public / authentifié
-- [ ] Sidebar
-- [ ] Guards de route
-- [ ] Composants globaux (loading, toast)
+- [x] Layout authentifié (sidebar + header + main)
+- [x] Sidebar avec icônes Heroicons
+- [x] Guards de route (auth, setup, redirections)
+- [x] Composants globaux (AppLoading, AppToast + useToast)
 
 ### 2.3 Auth & Setup (Module 0)
-- [ ] Page login
-- [ ] Store auth
-- [ ] Page setup
+- [x] Page login (email/password + magic link)
+- [x] Store auth (session, login, logout, signUp, checkSetup)
+- [x] Page setup (formulaire complet)
 
 ### 2.4 Contacts (Module A) + tests
 - [ ] Liste + recherche
@@ -184,3 +185,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 1 — Routes API : scaffolding, middleware, 7 fichiers routes, 0 erreur TS |
 | 2026-02-07 | Phase 1.6 — Génération PDF : documents commerciaux + certificat de cession |
 | 2026-02-07 | Phase 1 terminée — 60 tests backend (auth, pagination, PDF), 112 tests au total |
+| 2026-02-07 | Phase 2.1-2.3 — Scaffolding frontend, layout, auth, setup, 12 routes, build OK |

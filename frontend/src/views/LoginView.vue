@@ -1,0 +1,100 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+
+const { t } = useI18n()
+const router = useRouter()
+const auth = useAuthStore()
+const toast = useToast()
+
+const email = ref('')
+const password = ref('')
+const loading = ref(false)
+const magicLinkMode = ref(false)
+const magicLinkSent = ref(false)
+
+async function handleLogin() {
+  loading.value = true
+  try {
+    if (magicLinkMode.value) {
+      await auth.loginWithMagicLink(email.value)
+      magicLinkSent.value = true
+    } else {
+      await auth.login(email.value, password.value)
+      router.push(auth.setupComplete ? { name: 'dashboard' } : { name: 'setup' })
+    }
+  } catch {
+    toast.error(t('auth.error'))
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+<template>
+  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+    <div class="w-full max-w-sm">
+      <!-- Logo -->
+      <div class="mb-8 text-center">
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary-600 text-2xl font-bold text-white">
+          S
+        </div>
+        <h1 class="mt-4 text-2xl font-bold text-gray-900">{{ t('app.name') }}</h1>
+        <p class="mt-1 text-sm text-gray-500">{{ t('app.description') }}</p>
+      </div>
+
+      <!-- Message magic link envoyé -->
+      <div v-if="magicLinkSent" class="rounded-lg bg-green-50 p-4 text-center text-sm text-green-700">
+        {{ t('auth.magicLinkSent') }}
+      </div>
+
+      <!-- Formulaire -->
+      <form v-else class="space-y-4" @submit.prevent="handleLogin">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">{{ t('auth.email') }}</label>
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            required
+            autocomplete="email"
+            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+          />
+        </div>
+
+        <div v-if="!magicLinkMode">
+          <label for="password" class="block text-sm font-medium text-gray-700">{{ t('auth.password') }}</label>
+          <input
+            id="password"
+            v-model="password"
+            type="password"
+            required
+            autocomplete="current-password"
+            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+          />
+        </div>
+
+        <button
+          type="submit"
+          :disabled="loading"
+          class="flex w-full justify-center rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
+        >
+          {{ loading ? t('common.loading') : (magicLinkMode ? t('auth.magicLink') : t('auth.login')) }}
+        </button>
+
+        <div class="text-center">
+          <button
+            type="button"
+            class="text-sm text-primary-600 hover:text-primary-500"
+            @click="magicLinkMode = !magicLinkMode"
+          >
+            {{ magicLinkMode ? t('auth.login') : t('auth.magicLink') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>

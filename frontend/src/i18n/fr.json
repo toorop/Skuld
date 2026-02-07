@@ -1,0 +1,217 @@
+{
+  "app": {
+    "name": "Skuld",
+    "description": "Gestion Auto-Entrepreneur"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "contacts": "Contacts",
+    "documents": "Documents",
+    "transactions": "Trésorerie",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter"
+  },
+  "auth": {
+    "title": "Connexion",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "magicLink": "Recevoir un lien de connexion",
+    "magicLinkSent": "Un lien de connexion a été envoyé à votre adresse email.",
+    "or": "ou",
+    "error": "Identifiants incorrects. Veuillez réessayer."
+  },
+  "setup": {
+    "title": "Configuration initiale",
+    "subtitle": "Bienvenue ! Configurez votre instance Skuld pour commencer.",
+    "companyName": "Nom de l'entreprise",
+    "siret": "SIRET (14 chiffres)",
+    "activityType": "Type d'activité",
+    "addressLine1": "Adresse (ligne 1)",
+    "addressLine2": "Adresse (ligne 2)",
+    "postalCode": "Code postal",
+    "city": "Ville",
+    "phone": "Téléphone",
+    "email": "Email professionnel",
+    "bankIban": "IBAN",
+    "bankBic": "BIC",
+    "vatExemptText": "Mention TVA",
+    "activityStartDate": "Date de début d'activité",
+    "declarationFrequency": "Fréquence de déclaration",
+    "defaultPaymentTerms": "Délai de paiement par défaut (jours)",
+    "defaultPaymentMethod": "Mode de paiement par défaut",
+    "submit": "Valider la configuration",
+    "success": "Configuration enregistrée avec succès !"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "new": "Nouveau contact",
+    "edit": "Modifier le contact",
+    "delete": "Supprimer",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce contact ?",
+    "deleted": "Contact supprimé.",
+    "saved": "Contact enregistré.",
+    "search": "Rechercher un contact...",
+    "empty": "Aucun contact pour le moment.",
+    "displayName": "Nom affiché",
+    "legalName": "Raison sociale",
+    "type": "Type",
+    "email": "Email",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "isIndividual": "Particulier",
+    "siren": "SIREN",
+    "notes": "Notes",
+    "types": {
+      "CLIENT": "Client",
+      "SUPPLIER": "Fournisseur",
+      "BOTH": "Client & Fournisseur"
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "new": "Nouveau document",
+    "edit": "Modifier",
+    "empty": "Aucun document pour le moment.",
+    "saved": "Document enregistré.",
+    "sent": "Document envoyé et numéroté.",
+    "paid": "Document marqué comme payé.",
+    "cancelled": "Document annulé.",
+    "converted": "Devis converti en facture.",
+    "contact": "Contact",
+    "issuedDate": "Date d'émission",
+    "dueDate": "Date d'échéance",
+    "paymentMethod": "Mode de paiement",
+    "paymentTerms": "Délai de paiement (jours)",
+    "notes": "Notes",
+    "terms": "Conditions particulières",
+    "footerText": "Pied de page",
+    "reference": "Référence",
+    "totalHt": "Total HT",
+    "lines": "Lignes",
+    "addLine": "Ajouter une ligne",
+    "description": "Description",
+    "quantity": "Quantité",
+    "unit": "Unité",
+    "unitPrice": "Prix unitaire",
+    "fiscalCategory": "Catégorie fiscale",
+    "lineTotal": "Total",
+    "actions": {
+      "send": "Envoyer",
+      "pay": "Marquer payé",
+      "cancel": "Annuler",
+      "convert": "Convertir en facture",
+      "downloadPdf": "Télécharger PDF"
+    },
+    "confirmSend": "Envoyer ce document ? Il sera numéroté et ne pourra plus être modifié.",
+    "confirmCancel": "Annuler ce document ? Un avoir sera automatiquement créé.",
+    "types": {
+      "QUOTE": "Devis",
+      "INVOICE": "Facture",
+      "CREDIT_NOTE": "Avoir"
+    },
+    "status": {
+      "DRAFT": "Brouillon",
+      "SENT": "Envoyé",
+      "PAID": "Payé",
+      "CANCELLED": "Annulé"
+    }
+  },
+  "transactions": {
+    "title": "Trésorerie",
+    "new": "Nouvelle transaction",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette transaction ?",
+    "deleted": "Transaction supprimée.",
+    "saved": "Transaction enregistrée.",
+    "empty": "Aucune transaction pour le moment.",
+    "date": "Date",
+    "amount": "Montant",
+    "direction": "Direction",
+    "label": "Libellé",
+    "fiscalCategory": "Catégorie fiscale",
+    "paymentMethod": "Mode de paiement",
+    "isSecondHand": "Achat d'occasion",
+    "notes": "Notes",
+    "directions": {
+      "INCOME": "Recette",
+      "EXPENSE": "Dépense"
+    },
+    "proofs": {
+      "title": "Dossier de preuves",
+      "ad": "Capture d'annonce",
+      "payment": "Preuve de paiement",
+      "cession": "Certificat de cession",
+      "complete": "Dossier complet",
+      "incomplete": "Dossier incomplet",
+      "upload": "Déposer un fichier",
+      "generateCession": "Générer le certificat de cession"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord URSSAF",
+    "period": "Période",
+    "monthly": "Mensuel",
+    "quarterly": "Trimestriel",
+    "bicVente": "CA BIC Vente",
+    "bicPresta": "CA BIC Presta",
+    "bnc": "CA BNC",
+    "yearlyTotal": "Cumul annuel",
+    "threshold": "Seuil",
+    "exceeded": "Seuil dépassé !",
+    "approaching": "Seuil en approche",
+    "exportCsv": "Exporter en CSV"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "saved": "Paramètres enregistrés.",
+    "profile": "Profil",
+    "logo": "Logo",
+    "logoUpload": "Changer le logo",
+    "logoHint": "JPEG, PNG ou WebP, max 2 Mo",
+    "documents": "Personnalisation documents",
+    "declaration": "Déclaration URSSAF",
+    "export": "Exporter toutes les données",
+    "exportHint": "Télécharger un fichier JSON contenant toutes vos données.",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteAccountConfirm": "Cette action est irréversible. Toutes vos données seront définitivement supprimées.",
+    "deleteAccountConfirm2": "Tapez SUPPRIMER pour confirmer"
+  },
+  "fiscal": {
+    "BIC_VENTE": "BIC Vente",
+    "BIC_PRESTA": "BIC Presta",
+    "BNC": "BNC"
+  },
+  "activity": {
+    "BIC_VENTE": "Vente de marchandises",
+    "BIC_PRESTA": "Prestation de services (BIC)",
+    "BNC": "Professions libérales (BNC)",
+    "MIXED": "Activité mixte"
+  },
+  "payment": {
+    "BANK_TRANSFER": "Virement bancaire",
+    "CASH": "Espèces",
+    "CHECK": "Chèque",
+    "CARD": "Carte bancaire",
+    "PAYPAL": "PayPal",
+    "OTHER": "Autre"
+  },
+  "frequency": {
+    "MONTHLY": "Mensuelle",
+    "QUARTERLY": "Trimestrielle"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "loading": "Chargement...",
+    "noResults": "Aucun résultat.",
+    "error": "Une erreur est survenue.",
+    "required": "Ce champ est requis.",
+    "actions": "Actions"
+  }
+}
