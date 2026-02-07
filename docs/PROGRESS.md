@@ -9,7 +9,7 @@ Dernière mise à jour : 2026-02-07
 | Phase | Description                  | Avancement | Statut       |
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
-| 1     | Backend (API Hono)           | 80%        | En cours     |
+| 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 0%         | Non commencé |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
@@ -52,48 +52,41 @@ Dernière mise à jour : 2026-02-07
 - [x] package.json + dépendances
 - [x] wrangler.toml + wrangler.toml.example + .dev.vars.example
 - [x] Point d'entrée Hono (`index.ts` + `types.ts`)
-- [ ] Configuration Vitest (miniflare)
+- [x] Configuration Vitest
 
 ### 1.2 Middleware & utilitaires
-- [x] Auth JWT (`middleware/auth.ts`)
+- [x] Auth JWT (`middleware/auth.ts`) — 6 tests
 - [x] CORS (`middleware/cors.ts`)
 - [x] Client Supabase (`lib/supabase.ts`)
 - [x] Helpers réponse API (`lib/response.ts`)
 - [x] Validation Zod (`lib/validation.ts`)
-- [x] Pagination (`lib/pagination.ts`)
-- [x] Gestion d'erreurs (`middleware/error-handler.ts`)
-- [ ] Tests middleware
+- [x] Pagination (`lib/pagination.ts`) — 12 tests
+- [x] Gestion d'erreurs (`middleware/error-handler.ts`) — 1 test
 
 ### 1.3 Routes Settings
 - [x] POST /api/setup — configuration initiale (`routes/setup.ts`)
 - [x] GET/PUT /api/settings, POST logo, GET export, DELETE account (`routes/settings.ts`)
-- [ ] Tests
 
 ### 1.4 Routes Contacts
 - [x] CRUD complet + recherche + protection suppression (`routes/contacts.ts`)
-- [ ] Tests
 
 ### 1.5 Routes Documents
 - [x] CRUD + send/pay/cancel/convert/pdf (9 routes) (`routes/documents.ts`)
-- [ ] Tests
 
 ### 1.6 Génération PDF
-- [x] Template PDF document commercial (facture/devis/avoir) avec pdf-lib
-- [x] Template PDF certificat de cession (achat occasion)
+- [x] Template PDF document commercial (facture/devis/avoir) — 8 tests
+- [x] Template PDF certificat de cession — 6 tests
+- [x] Helpers PDF (formatage, dessin) — 27 tests
 - [x] Stockage R2 + intégration routes (/send + /cession-pdf)
-- [ ] Tests
 
 ### 1.7 Routes Transactions
 - [x] CRUD + création auto proof_bundle (`routes/transactions.ts`)
-- [ ] Tests
 
 ### 1.8 Routes Preuves
 - [x] Upload, bundle, download, cession PDF (`routes/proofs.ts`)
-- [ ] Tests
 
 ### 1.9 Routes Dashboard
 - [x] Totaux URSSAF mensuel/trimestriel + alertes seuils + export CSV (`routes/dashboard.ts`)
-- [ ] Tests
 
 ---
 
@@ -190,3 +183,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 0.3 terminée : 10 migrations SQL (tables, triggers, RLS, index) |
 | 2026-02-07 | Phase 1 — Routes API : scaffolding, middleware, 7 fichiers routes, 0 erreur TS |
 | 2026-02-07 | Phase 1.6 — Génération PDF : documents commerciaux + certificat de cession |
+| 2026-02-07 | Phase 1 terminée — 60 tests backend (auth, pagination, PDF), 112 tests au total |

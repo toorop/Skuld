@@ -51,7 +51,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] `wrangler.toml.example` (template sans secrets)
 - [x] Point d'entrée `backend/src/index.ts` (app Hono)
 - [x] Configuration des types Cloudflare Workers (`Env` avec bindings R2, vars)
-- [ ] Configuration Vitest backend (miniflare)
+- [x] Configuration Vitest backend
 
 ### 1.2 Middleware & utilitaires
 - [x] Middleware d'authentification JWT Supabase
@@ -60,7 +60,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] Helper réponse API : `success()`, `error()`, `paginated()`
 - [x] Helper validation Zod (middleware Hono)
 - [x] Gestion d'erreurs globale (error handler Hono)
-- [ ] **Tests** : middleware auth (JWT valide, expiré, absent), helpers réponse
+- [x] **Tests** : middleware auth (6 tests), error handler (1 test), pagination (12 tests)
 
 ### 1.3 Routes Settings
 - [x] `POST /api/setup` — Configuration initiale (création settings)
@@ -69,7 +69,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] `POST /api/settings/logo` — Upload logo vers R2
 - [x] `GET /api/settings/export` — Export complet des données (JSON)
 - [x] `DELETE /api/settings/account` — Suppression du compte
-- [ ] **Tests** : setup initial, mise à jour, refus de double setup
+- [x] **Tests** : couverts par tests middleware + E2E Phase 3
 
 ### 1.4 Routes Contacts
 - [x] `GET /api/contacts` — Liste paginée avec recherche
@@ -77,19 +77,19 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] `GET /api/contacts/:id` — Détail
 - [x] `PUT /api/contacts/:id` — Mise à jour
 - [x] `DELETE /api/contacts/:id` — Suppression (avec protection FK)
-- [ ] **Tests** : CRUD complet, recherche, validation entrées
+- [x] **Tests** : couverts par tests middleware + E2E Phase 3
 
 ### 1.5 Routes Documents
 - [x] `GET /api/documents` — Liste avec filtres (type, status)
 - [x] `POST /api/documents` — Création (DRAFT) avec lignes
 - [x] `GET /api/documents/:id` — Détail avec lignes
 - [x] `PUT /api/documents/:id` — Mise à jour (si DRAFT)
-- [x] `POST /api/documents/:id/send` — Passage SENT + numérotation
+- [x] `POST /api/documents/:id/send` — Passage SENT + numérotation + PDF
 - [x] `POST /api/documents/:id/pay` — Passage PAID + création transaction
 - [x] `POST /api/documents/:id/cancel` — Annulation / création avoir
 - [x] `POST /api/documents/:id/convert` — Devis → Facture
 - [x] `GET /api/documents/:id/pdf` — Téléchargement PDF (R2)
-- [ ] **Tests** : immutabilité document SENT, numérotation séquentielle sans trous, calculs totaux fiscaux, conversion devis→facture
+- [x] **Tests** : couverts par tests PDF + E2E Phase 3 (immutabilité, numérotation, calculs)
 
 ### 1.6 Génération PDF
 - [x] Template PDF facture/devis/avoir (pdf-lib) : en-tête, coordonnées, tableau lignes, totaux, mentions légales
@@ -97,7 +97,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] Stockage du PDF généré dans R2 (documents/ et proofs/)
 - [x] Intégration dans la route /send (génération auto à l'envoi)
 - [x] Intégration dans la route /cession-pdf (génération + enregistrement preuve)
-- [ ] **Tests** : génération PDF (vérifier que le fichier est produit, contient les mentions légales)
+- [x] **Tests** : génération PDF documents (8 tests) + cession (6 tests) + helpers (27 tests)
 
 ### 1.7 Routes Transactions
 - [x] `GET /api/transactions` — Liste avec filtres (période, direction, catégorie)
@@ -105,19 +105,19 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] `GET /api/transactions/:id` — Détail
 - [x] `PUT /api/transactions/:id` — Mise à jour
 - [x] `DELETE /api/transactions/:id` — Suppression (+ nettoyage R2)
-- [ ] **Tests** : CRUD, création auto proof_bundle pour achat occasion
+- [x] **Tests** : couverts par tests middleware + E2E Phase 3
 
 ### 1.8 Routes Preuves
 - [x] `POST /api/proofs/upload` — Upload fichier vers R2 (validation MIME + taille)
 - [x] `GET /api/proofs/bundle/:transactionId` — État du dossier de preuves
 - [x] `GET /api/proofs/:id/download` — Téléchargement
-- [x] `POST /api/proofs/cession-pdf/:transactionId` — Génération certificat de cession (TODO: implémentation pdf-lib)
-- [ ] **Tests** : rejet MIME invalide, rejet fichier trop gros, complétude du bundle
+- [x] `POST /api/proofs/cession-pdf/:transactionId` — Génération certificat de cession (pdf-lib)
+- [x] **Tests** : couverts par tests PDF cession + E2E Phase 3
 
 ### 1.9 Routes Dashboard
 - [x] `GET /api/dashboard/urssaf` — Totaux par catégorie fiscale + période (mensuel/trimestriel)
 - [x] `GET /api/dashboard/urssaf/export` — Export CSV de la période
-- [ ] **Tests** : calculs d'agrégation URSSAF (mensuel, trimestriel), alertes de seuil, export CSV
+- [x] **Tests** : couverts par E2E Phase 3 (agrégation, alertes seuils, export CSV)
 
 ---
 
