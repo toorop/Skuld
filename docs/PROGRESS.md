@@ -8,7 +8,7 @@ Dernière mise à jour : 2026-02-07
 
 | Phase | Description                  | Avancement | Statut       |
 | ----- | ---------------------------- | ---------- | ------------ |
-| 0     | Fondations (Monorepo)        | 0%         | En cours     |
+| 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 0%         | Non commencé |
 | 2     | Frontend (Vue 3)             | 0%         | Non commencé |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
@@ -33,16 +33,16 @@ Dernière mise à jour : 2026-02-07
 - [x] Tests validation Zod (52 tests)
 
 ### 0.3 Migrations SQL
-- [ ] Enums
-- [ ] Table settings
-- [ ] Table sequences + fonction next_sequence()
-- [ ] Table contacts
-- [ ] Tables documents + document_lines + trigger immutabilité
-- [ ] Table transactions
-- [ ] Tables proof_bundles + proofs
-- [ ] RLS policies
-- [ ] Index
-- [ ] Trigger updated_at
+- [x] Enums
+- [x] Table settings (+ contrainte single-row)
+- [x] Table sequences + fonction next_sequence()
+- [x] Table contacts
+- [x] Tables documents + document_lines + triggers (immutabilité + recalcul totaux)
+- [x] Table transactions
+- [x] Tables proof_bundles + proofs + trigger mise à jour flags
+- [x] RLS policies (fonction is_owner + policies sur 7 tables)
+- [x] Index (14 index de performance)
+- [x] Trigger updated_at
 
 ---
 
@@ -183,3 +183,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Ajout stratégie de tests dans chaque phase                |
 | 2026-02-07 | Phase 0.1 terminée : monorepo, TS, Vitest, .env, .gitignore |
 | 2026-02-07 | Phase 0.2 terminée : types, schémas Zod, constantes, 52 tests |
+| 2026-02-07 | Phase 0.3 terminée : 10 migrations SQL (tables, triggers, RLS, index) |

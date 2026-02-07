@@ -29,16 +29,16 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] **Tests** : validation Zod (valeurs valides, invalides, cas limites SIRET/IBAN)
 
 ### 0.3 Migrations SQL (`supabase/migrations/`)
-- [ ] `00001_enums.sql` — Tous les types ENUM
-- [ ] `00002_settings.sql` — Table `settings` + contrainte single-row
-- [ ] `00003_sequences.sql` — Table `sequences` + fonction `next_sequence()`
-- [ ] `00004_contacts.sql` — Table `contacts`
-- [ ] `00005_documents.sql` — Tables `documents` + `document_lines` + trigger immutabilité
-- [ ] `00006_transactions.sql` — Table `transactions`
-- [ ] `00007_proof_bundles.sql` — Tables `proof_bundles` + `proofs`
-- [ ] `00008_rls.sql` — RLS policies sur toutes les tables
-- [ ] `00009_indexes.sql` — Index de performance
-- [ ] `00010_updated_at.sql` — Trigger `updated_at` automatique sur toutes les tables
+- [x] `00001_enums.sql` — Tous les types ENUM
+- [x] `00002_settings.sql` — Table `settings` + contrainte single-row
+- [x] `00003_sequences.sql` — Table `sequences` + fonction `next_sequence()`
+- [x] `00004_contacts.sql` — Table `contacts`
+- [x] `00005_documents.sql` — Tables `documents` + `document_lines` + trigger immutabilité + trigger recalcul totaux
+- [x] `00006_transactions.sql` — Table `transactions`
+- [x] `00007_proof_bundles.sql` — Tables `proof_bundles` + `proofs` + trigger mise à jour flags
+- [x] `00008_rls.sql` — RLS policies sur toutes les tables
+- [x] `00009_indexes.sql` — Index de performance
+- [x] `00010_updated_at.sql` — Trigger `updated_at` automatique sur toutes les tables
 
 ---
 
