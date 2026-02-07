@@ -129,7 +129,10 @@ skuld/
 │   └── shared/            # Types et schémas Zod partagés
 ├── supabase/
 │   └── migrations/        # Migrations SQL
-├── SPECIFICATION.md       # Spécification complète du projet
+├── docs/
+│   ├── SPECIFICATION.md   # Spécification complète
+│   ├── ROADMAP.md         # Plan de développement
+│   └── PROGRESS.md        # Suivi d'avancement
 └── README.md
 ```
 

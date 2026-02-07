@@ -28,8 +28,11 @@ skuld/
 │   └── shared/        # Types, constantes, schémas Zod
 ├── supabase/
 │   └── migrations/    # SQL versionnés (ordre chronologique)
-├── SPECIFICATION.md   # Spec fonctionnelle et technique complète
-├── CLAUDE.md          # Ce fichier
+├── docs/
+│   ├── SPECIFICATION.md   # Spec fonctionnelle et technique complète
+│   ├── ROADMAP.md         # Plan de développement détaillé
+│   └── PROGRESS.md        # Suivi d'avancement
+├── CLAUDE.md              # Ce fichier
 └── README.md
 ```
 
