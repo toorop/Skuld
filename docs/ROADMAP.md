@@ -92,11 +92,11 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] **Tests** : immutabilité document SENT, numérotation séquentielle sans trous, calculs totaux fiscaux, conversion devis→facture
 
 ### 1.6 Génération PDF
-- [ ] Template PDF facture (pdf-lib) : en-tête, coordonnées, tableau lignes, totaux, mentions légales
-- [ ] Template PDF devis
-- [ ] Template PDF avoir
-- [ ] Template PDF certificat de cession (achat occasion)
-- [ ] Stockage du PDF généré dans R2
+- [x] Template PDF facture/devis/avoir (pdf-lib) : en-tête, coordonnées, tableau lignes, totaux, mentions légales
+- [x] Template PDF certificat de cession (achat occasion)
+- [x] Stockage du PDF généré dans R2 (documents/ et proofs/)
+- [x] Intégration dans la route /send (génération auto à l'envoi)
+- [x] Intégration dans la route /cession-pdf (génération + enregistrement preuve)
 - [ ] **Tests** : génération PDF (vérifier que le fichier est produit, contient les mentions légales)
 
 ### 1.7 Routes Transactions

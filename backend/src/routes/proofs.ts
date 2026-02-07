@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '@skuld/shared'
 import type { Env, AppVariables } from '../types'
 import { success, errors } from '../lib/response'
+import { generateCessionPdf } from '../lib/pdf'
 
 const proofs = new Hono<{ Bindings: Env; Variables: AppVariables }>()
 
@@ -148,9 +149,51 @@ proofs.post('/cession-pdf/:transactionId', async (c) => {
     return errors.conflict(c, 'Cette transaction n\'est pas un achat d\'occasion')
   }
 
-  // TODO Phase 1.6 : générer le PDF du certificat de cession avec pdf-lib
-  // Pour l'instant on renvoie un placeholder
-  return errors.internal(c, 'Génération PDF non encore implémentée (Phase 1.6)')
+  // Récupérer le proof_bundle associé
+  const { data: bundle } = await supabase
+    .from('proof_bundles')
+    .select('id')
+    .eq('transaction_id', transactionId)
+    .single()
+
+  if (!bundle) {
+    return errors.notFound(c, 'Dossier de preuves')
+  }
+
+  // Générer le PDF
+  const pdfBytes = await generateCessionPdf({
+    settings: settingsRes.data,
+    transaction: txRes.data,
+    contact: txRes.data.contacts ?? { display_name: 'Vendeur' },
+  })
+
+  // Stocker dans R2
+  const bucket = c.env.R2_BUCKET
+  const key = `proofs/${bundle.id}/certificat-cession-${transactionId}.pdf`
+  await bucket.put(key, pdfBytes, {
+    httpMetadata: { contentType: 'application/pdf' },
+  })
+
+  // Enregistrer comme preuve de type CESSION_CERT
+  const { data: proof, error: proofError } = await supabase
+    .from('proofs')
+    .insert({
+      bundle_id: bundle.id,
+      type: 'CESSION_CERT',
+      file_url: key,
+      file_name: `certificat-cession-${transactionId}.pdf`,
+      file_size: pdfBytes.length,
+      mime_type: 'application/pdf',
+    })
+    .select()
+    .single()
+
+  if (proofError) {
+    await bucket.delete(key)
+    return errors.internal(c, `Erreur : ${proofError.message}`)
+  }
+
+  return success(c, proof, 201)
 })
 
 export { proofs }

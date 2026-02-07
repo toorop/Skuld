@@ -5,6 +5,7 @@ import type { Env, AppVariables } from '../types'
 import { success, errors, paginated } from '../lib/response'
 import { validate, getValidated } from '../lib/validation'
 import { parsePagination, buildPaginationMeta } from '../lib/pagination'
+import { generateDocumentPdf } from '../lib/pdf'
 
 const documents = new Hono<{ Bindings: Env; Variables: AppVariables }>()
 
@@ -195,18 +196,55 @@ documents.post('/:id/send', async (c) => {
     return errors.internal(c, `Erreur de numérotation : ${refError?.message}`)
   }
 
-  const { data: updated, error: updateError } = await supabase
+  const { error: updateError } = await supabase
     .from('documents')
     .update({ status: 'SENT', reference: refData })
     .eq('id', id)
-    .select('*, document_lines(*), contacts(*)')
-    .single()
 
   if (updateError) {
     return errors.internal(c, `Erreur lors de l'envoi : ${updateError.message}`)
   }
 
-  // TODO Phase 1.6 : générer le PDF et le stocker dans R2
+  // Récupérer le document mis à jour + settings (en parallèle) pour le PDF
+  const [docRes, settingsRes] = await Promise.all([
+    supabase
+      .from('documents')
+      .select('*, document_lines(*), contacts(*)')
+      .eq('id', id)
+      .order('position', { referencedTable: 'document_lines' })
+      .single(),
+    supabase.from('settings').select('*').single(),
+  ])
+
+  const updated = docRes.data
+  const pdfSettings = settingsRes.data
+
+  // Générer et stocker le PDF dans R2
+  if (updated && pdfSettings) {
+    let logoBytes: Uint8Array | null = null
+    let logoMimeType: string | null = null
+
+    if (pdfSettings.logo_url) {
+      const logoObj = await c.env.R2_BUCKET.get(pdfSettings.logo_url)
+      if (logoObj) {
+        logoBytes = new Uint8Array(await logoObj.arrayBuffer())
+        logoMimeType = logoObj.httpMetadata?.contentType ?? null
+      }
+    }
+
+    const pdfBytes = await generateDocumentPdf({
+      settings: pdfSettings,
+      document: updated,
+      lines: updated.document_lines ?? [],
+      contact: updated.contacts ?? { display_name: '' },
+      logo: logoBytes,
+      logoMimeType,
+    })
+
+    await c.env.R2_BUCKET.put(`documents/${id}.pdf`, pdfBytes, {
+      httpMetadata: { contentType: 'application/pdf' },
+    })
+  }
 
   return success(c, updated)
 })

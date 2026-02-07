@@ -9,7 +9,7 @@ Dernière mise à jour : 2026-02-07
 | Phase | Description                  | Avancement | Statut       |
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
-| 1     | Backend (API Hono)           | 70%        | En cours     |
+| 1     | Backend (API Hono)           | 80%        | En cours     |
 | 2     | Frontend (Vue 3)             | 0%         | Non commencé |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
@@ -78,8 +78,9 @@ Dernière mise à jour : 2026-02-07
 - [ ] Tests
 
 ### 1.6 Génération PDF
-- [ ] Templates PDF (facture, devis, avoir, certificat cession)
-- [ ] Stockage R2
+- [x] Template PDF document commercial (facture/devis/avoir) avec pdf-lib
+- [x] Template PDF certificat de cession (achat occasion)
+- [x] Stockage R2 + intégration routes (/send + /cession-pdf)
 - [ ] Tests
 
 ### 1.7 Routes Transactions
@@ -188,3 +189,4 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 0.2 terminée : types, schémas Zod, constantes, 52 tests |
 | 2026-02-07 | Phase 0.3 terminée : 10 migrations SQL (tables, triggers, RLS, index) |
 | 2026-02-07 | Phase 1 — Routes API : scaffolding, middleware, 7 fichiers routes, 0 erreur TS |
+| 2026-02-07 | Phase 1.6 — Génération PDF : documents commerciaux + certificat de cession |
