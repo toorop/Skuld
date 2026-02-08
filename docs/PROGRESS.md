@@ -10,7 +10,7 @@ Dernière mise à jour : 2026-02-08
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
-| 2     | Frontend (Vue 3)             | 87%        | En cours     |
+| 2     | Frontend (Vue 3)             | 100%       | Terminé      |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
 
@@ -144,10 +144,12 @@ Dernière mise à jour : 2026-02-08
 - [ ] Tests DashboardView
 
 ### 2.8 Paramètres (Module E)
-- [ ] Formulaire profil
-- [ ] Upload logo
-- [ ] Export données
-- [ ] Suppression compte
+- [x] Formulaire profil entreprise (12 champs, validation Zod, grille responsive)
+- [x] Upload logo (validation type/taille, aperçu, action immédiate)
+- [x] Personnalisation documents (mention TVA, délai paiement, mode paiement)
+- [x] Déclaration URSSAF (radio buttons mensuelle/trimestrielle)
+- [x] Export données (téléchargement JSON)
+- [x] Suppression compte (dialog Headless UI, double confirmation « SUPPRIMER »)
 
 ---
 
@@ -195,3 +197,4 @@ Dernière mise à jour : 2026-02-08
 | 2026-02-07 | Phase 2.5 — Module Documents : store, liste onglets, éditeur lignes, formulaire, détail + actions |
 | 2026-02-08 | Phase 2.6 — Module Trésorerie : store, liste paginée, formulaire, détail, ProofUploader, ProofBundle |
 | 2026-02-08 | Phase 2.7 — Dashboard URSSAF : store settings, store dashboard, vue complète, export CSV |
+| 2026-02-08 | Phase 2.8 — Paramètres : profil entreprise, logo, personnalisation docs, URSSAF, export, suppression compte |

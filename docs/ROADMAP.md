@@ -198,12 +198,12 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] **Tests** : DashboardView (affichage correct des montants, alertes de seuil)
 
 ### 2.8 Paramètres (Module E)
-- [ ] Page `/app/settings` — Formulaire édition profil
-- [ ] Section upload / changement de logo
-- [ ] Section personnalisation documents (pied de page, mentions)
-- [ ] Section fréquence de déclaration
-- [ ] Bouton export données (ZIP)
-- [ ] Bouton suppression compte (avec double confirmation)
+- [x] Page `/app/settings` — Formulaire édition profil (12 champs, validation Zod, grille responsive)
+- [x] Section upload / changement de logo (aperçu 96×96, validation type/taille)
+- [x] Section personnalisation documents (mention TVA, délai paiement, mode paiement)
+- [x] Section fréquence de déclaration (radio buttons)
+- [x] Bouton export données (JSON)
+- [x] Bouton suppression compte (dialog Headless UI, double confirmation « SUPPRIMER »)
 
 ---
 
