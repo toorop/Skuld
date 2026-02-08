@@ -209,13 +209,15 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 
 ## Phase 3 — Intégration, E2E & Polish
 
-### 3.1 Tests E2E (Playwright)
-- [ ] Setup Playwright + configuration
-- [ ] E2E : inscription + setup initial
-- [ ] E2E : création contact → création devis → conversion facture → marquage payé
-- [ ] E2E : saisie dépense achat occasion → upload preuves → vérification complétude
-- [ ] E2E : vérification dashboard URSSAF (totaux corrects après opérations)
-- [ ] E2E : export CSV
+### 3.1 Tests E2E (Playwright) ✅
+- [x] Setup Playwright + configuration (`playwright.config.ts`, `frontend/.env.test`)
+- [x] Fixtures : factories test-data + helpers auth/API mock (`e2e/fixtures/`)
+- [x] E2E : inscription + setup initial (`e2e/setup.spec.ts`)
+- [x] E2E : création contact → création devis → conversion facture → marquage payé (`e2e/invoicing.spec.ts`)
+- [x] E2E : saisie dépense achat occasion → upload preuves → vérification complétude (`e2e/second-hand.spec.ts`)
+- [x] E2E : vérification dashboard URSSAF (totaux corrects après opérations) (`e2e/dashboard.spec.ts`)
+- [x] E2E : export CSV (`e2e/export.spec.ts`)
+- [x] E2E : paramètres (`e2e/settings.spec.ts`)
 
 ### 3.2 Intégration frontend ↔ backend
 - [ ] Vérifier l'immutabilité des documents envoyés

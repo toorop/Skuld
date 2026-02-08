@@ -11,7 +11,7 @@ Dernière mise à jour : 2026-02-08
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 100%       | Terminé      |
-| 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
+| 3     | Intégration, E2E & Polish    | 15%        | En cours     |
 | 4     | Post-MVP                     | —          | Futur        |
 
 ---
@@ -156,12 +156,14 @@ Dernière mise à jour : 2026-02-08
 ## Phase 3 — Intégration, E2E & Polish
 
 ### 3.1 Tests E2E (Playwright)
-- [ ] Setup Playwright
-- [ ] E2E : inscription + setup
-- [ ] E2E : flux facturation complet
-- [ ] E2E : achat occasion + preuves
-- [ ] E2E : dashboard URSSAF
-- [ ] E2E : export CSV
+- [x] Setup Playwright + configuration (`playwright.config.ts`, `frontend/.env.test`)
+- [x] Fixtures : factories test-data + helpers auth/API mock (`e2e/fixtures/`)
+- [x] E2E : inscription + setup (`e2e/setup.spec.ts`)
+- [x] E2E : flux facturation complet (`e2e/invoicing.spec.ts`)
+- [x] E2E : achat occasion + preuves (`e2e/second-hand.spec.ts`)
+- [x] E2E : dashboard URSSAF (`e2e/dashboard.spec.ts`)
+- [x] E2E : export CSV (`e2e/export.spec.ts`)
+- [x] E2E : paramètres (`e2e/settings.spec.ts`)
 
 ### 3.2 Intégration
 - [ ] Vérification immutabilité, calculs URSSAF, numérotation
@@ -198,3 +200,4 @@ Dernière mise à jour : 2026-02-08
 | 2026-02-08 | Phase 2.6 — Module Trésorerie : store, liste paginée, formulaire, détail, ProofUploader, ProofBundle |
 | 2026-02-08 | Phase 2.7 — Dashboard URSSAF : store settings, store dashboard, vue complète, export CSV |
 | 2026-02-08 | Phase 2.8 — Paramètres : profil entreprise, logo, personnalisation docs, URSSAF, export, suppression compte |
+| 2026-02-08 | Phase 3.1 — Tests E2E Playwright : 6 specs (setup, invoicing, second-hand, dashboard, export, settings), fixtures + helpers, 6/6 passing |
