@@ -139,6 +139,7 @@
     "paymentMethod": "Mode de paiement",
     "isSecondHand": "Achat d'occasion",
     "notes": "Notes",
+    "contact": "Contact",
     "directions": {
       "INCOME": "Recette",
       "EXPENSE": "Dépense"
@@ -151,7 +152,11 @@
       "complete": "Dossier complet",
       "incomplete": "Dossier incomplet",
       "upload": "Déposer un fichier",
-      "generateCession": "Générer le certificat de cession"
+      "uploaded": "Fichier déposé avec succès.",
+      "downloading": "Télécharger",
+      "fileHint": "JPEG, PNG, WebP ou PDF — max 5 Mo",
+      "generateCession": "Générer le certificat de cession",
+      "cessionGenerated": "Certificat de cession généré."
     }
   },
   "dashboard": {
