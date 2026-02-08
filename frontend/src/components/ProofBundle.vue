@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useTransactionsStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
@@ -12,7 +11,6 @@ import {
   DocumentTextIcon,
 } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
 const store = useTransactionsStore()
 const toast = useToast()
 
@@ -39,21 +37,21 @@ const cessionProof = computed(() => findProof('CESSION_CERT'))
 const items = computed(() => [
   {
     key: 'ad',
-    label: t('transactions.proofs.ad'),
+    label: 'Capture d\'annonce',
     type: 'SCREENSHOT_AD' as const,
     done: props.bundle.hasAd,
     proof: adProof.value,
   },
   {
     key: 'payment',
-    label: t('transactions.proofs.payment'),
+    label: 'Preuve de paiement',
     type: 'PAYMENT_PROOF' as const,
     done: props.bundle.hasPayment,
     proof: paymentProof.value,
   },
   {
     key: 'cession',
-    label: t('transactions.proofs.cession'),
+    label: 'Certificat de cession',
     type: 'CESSION_CERT' as const,
     done: props.bundle.hasCession,
     proof: cessionProof.value,
@@ -68,13 +66,13 @@ async function handleGenerateCession() {
   generatingCession.value = true
   try {
     await store.generateCessionPdf(props.transactionId)
-    toast.success(t('transactions.proofs.cessionGenerated'))
+    toast.success('Certificat de cession généré.')
     emit('updated')
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     generatingCession.value = false
@@ -86,7 +84,7 @@ async function handleGenerateCession() {
   <div class="space-y-4">
     <!-- En-tête avec badge complétude -->
     <div class="flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">{{ t('transactions.proofs.title') }}</h3>
+      <h3 class="text-lg font-semibold text-gray-900">Dossier de preuves</h3>
       <span
         class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
         :class="
@@ -97,7 +95,7 @@ async function handleGenerateCession() {
       >
         <CheckCircleIcon v-if="bundle.isComplete" class="h-3.5 w-3.5" />
         <ClockIcon v-else class="h-3.5 w-3.5" />
-        {{ bundle.isComplete ? t('transactions.proofs.complete') : t('transactions.proofs.incomplete') }}
+        {{ bundle.isComplete ? 'Dossier complet' : 'Dossier incomplet' }}
       </span>
     </div>
 
@@ -140,7 +138,7 @@ async function handleGenerateCession() {
         @click="handleGenerateCession"
       >
         <DocumentTextIcon class="h-4 w-4" />
-        {{ generatingCession ? t('common.loading') : t('transactions.proofs.generateCession') }}
+        {{ generatingCession ? 'Chargement...' : 'Générer le certificat de cession' }}
       </button>
     </div>
   </div>

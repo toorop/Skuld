@@ -7,9 +7,6 @@ import {
   TransitionChild,
 } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 
 defineProps<{
   open: boolean
@@ -74,7 +71,7 @@ const emit = defineEmits<{
                 class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 @click="emit('cancel')"
               >
-                {{ t('common.cancel') }}
+                Annuler
               </button>
               <button
                 type="button"
@@ -86,7 +83,7 @@ const emit = defineEmits<{
                 "
                 @click="emit('confirm')"
               >
-                {{ confirmLabel || t('common.confirm') }}
+                {{ confirmLabel || 'Confirmer' }}
               </button>
             </div>
           </DialogPanel>

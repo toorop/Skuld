@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useTransactionsStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
@@ -13,7 +12,9 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
+const directionLabels: Record<string, string> = { INCOME: 'Recette', EXPENSE: 'Dépense' }
+const fiscalLabels: Record<string, string> = { BIC_VENTE: 'BIC Vente', BIC_PRESTA: 'BIC Presta', BNC: 'BNC' }
+
 const router = useRouter()
 const store = useTransactionsStore()
 const toast = useToast()
@@ -45,12 +46,12 @@ async function confirmDelete() {
   deleting.value = true
   try {
     await store.deleteTransaction(deleteId.value)
-    toast.success(t('transactions.deleted'))
+    toast.success('Transaction supprimée.')
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     deleting.value = false
@@ -86,13 +87,13 @@ function formatDate(iso: string): string {
   <div>
     <!-- En-tête -->
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-900">{{ t('transactions.title') }}</h1>
+      <h1 class="text-2xl font-bold text-gray-900">Trésorerie</h1>
       <router-link
         to="/app/transactions/new"
         class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
       >
         <PlusIcon class="h-4 w-4" />
-        {{ t('transactions.new') }}
+        Nouvelle transaction
       </router-link>
     </div>
 
@@ -120,10 +121,10 @@ function formatDate(iso: string): string {
         v-model="fiscalFilter"
         class="rounded-lg border-gray-300 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
       >
-        <option value="">{{ t('transactions.fiscalCategory') }} : Toutes</option>
-        <option value="BIC_VENTE">{{ t('fiscal.BIC_VENTE') }}</option>
-        <option value="BIC_PRESTA">{{ t('fiscal.BIC_PRESTA') }}</option>
-        <option value="BNC">{{ t('fiscal.BNC') }}</option>
+        <option value="">Catégorie fiscale : Toutes</option>
+        <option value="BIC_VENTE">BIC Vente</option>
+        <option value="BIC_PRESTA">BIC Presta</option>
+        <option value="BNC">BNC</option>
       </select>
     </div>
 
@@ -139,7 +140,7 @@ function formatDate(iso: string): string {
       v-else-if="store.transactions.length === 0"
       class="mt-12 text-center text-sm text-gray-500"
     >
-      {{ t('transactions.empty') }}
+      Aucune transaction pour le moment.
     </div>
 
     <!-- Tableau -->
@@ -151,37 +152,37 @@ function formatDate(iso: string): string {
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('transactions.date') }}
+                Date
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('transactions.label') }}
+                Libellé
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('transactions.direction') }}
+                Direction
               </th>
               <th
                 class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('transactions.amount') }}
+                Montant
               </th>
               <th
                 class="hidden px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 md:table-cell"
               >
-                {{ t('transactions.fiscalCategory') }}
+                Catégorie fiscale
               </th>
               <th
                 class="hidden px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 lg:table-cell"
               >
-                {{ t('transactions.proofs.title') }}
+                Dossier de preuves
               </th>
               <th
                 class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('common.actions') }}
+                Actions
               </th>
             </tr>
           </thead>
@@ -203,7 +204,7 @@ function formatDate(iso: string): string {
                   class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
                   :class="directionBadgeClass(tx.direction)"
                 >
-                  {{ t(`transactions.directions.${tx.direction}`) }}
+                  {{ directionLabels[tx.direction] }}
                 </span>
               </td>
               <td class="whitespace-nowrap px-4 py-3 text-right text-sm font-medium text-gray-900">
@@ -212,7 +213,7 @@ function formatDate(iso: string): string {
               <td
                 class="hidden whitespace-nowrap px-4 py-3 text-sm text-gray-500 md:table-cell"
               >
-                {{ tx.fiscalCategory ? t(`fiscal.${tx.fiscalCategory}`) : '—' }}
+                {{ tx.fiscalCategory ? fiscalLabels[tx.fiscalCategory] : '—' }}
               </td>
               <td
                 class="hidden whitespace-nowrap px-4 py-3 text-center lg:table-cell"
@@ -232,7 +233,7 @@ function formatDate(iso: string): string {
               <td class="whitespace-nowrap px-4 py-3 text-right text-sm" @click.stop>
                 <button
                   class="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
-                  :title="t('transactions.delete')"
+                  title="Supprimer"
                   @click="deleteId = tx.id"
                 >
                   <TrashIcon class="h-4 w-4" />
@@ -274,9 +275,9 @@ function formatDate(iso: string): string {
     <!-- Dialog de confirmation de suppression -->
     <ConfirmDialog
       :open="!!deleteId"
-      :title="t('transactions.delete')"
-      :message="t('transactions.deleteConfirm')"
-      :confirm-label="t('common.delete')"
+      title="Supprimer"
+      message="Êtes-vous sûr de vouloir supprimer cette transaction ?"
+      confirm-label="Supprimer"
       destructive
       @confirm="confirmDelete"
       @cancel="deleteId = null"

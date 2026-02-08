@@ -1,6 +1,6 @@
 # Suivi d'avancement — Skuld
 
-Dernière mise à jour : 2026-02-07
+Dernière mise à jour : 2026-02-08
 
 ---
 
@@ -10,7 +10,7 @@ Dernière mise à jour : 2026-02-07
 | ----- | ---------------------------- | ---------- | ------------ |
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
-| 2     | Frontend (Vue 3)             | 55%        | En cours     |
+| 2     | Frontend (Vue 3)             | 87%        | En cours     |
 | 3     | Intégration, E2E & Polish    | 0%         | Non commencé |
 | 4     | Post-MVP                     | —          | Futur        |
 
@@ -128,18 +128,20 @@ Dernière mise à jour : 2026-02-07
 - [ ] Tests DocumentLineEditor (calculs fiscaux)
 
 ### 2.6 Trésorerie (Module C) + tests
-- [ ] Liste transactions
-- [ ] Formulaire création
-- [ ] Workflow achat occasion
-- [ ] Gestion des preuves
+- [x] Store Pinia transactions (CRUD + mapping snake_case → camelCase)
+- [x] Liste transactions paginée + filtres (direction, catégorie)
+- [x] Formulaire création/édition (TransactionForm réutilisable + validation Zod)
+- [x] Fiche détail + suppression
+- [x] Composant ProofUploader (upload fichier vers R2)
+- [x] Composant ProofBundle (checklist visuelle du dossier de preuves)
 - [ ] Tests ProofUploader, ProofBundle
 
 ### 2.7 Dashboard URSSAF (Module D) + tests
-- [ ] Totaux par catégorie
-- [ ] Sélecteur de période
-- [ ] Alertes de seuil
-- [ ] Export CSV
-- [ ] Tests UrsaffTotals
+- [x] Store Pinia settings (fetch/cache, mapping snake_case → camelCase)
+- [x] Store Pinia dashboard (fetch URSSAF + export CSV)
+- [x] Page complète : sélecteur de période, 3 cartes fiscales, barres de progression, alertes
+- [x] Export CSV avec téléchargement automatique
+- [ ] Tests DashboardView
 
 ### 2.8 Paramètres (Module E)
 - [ ] Formulaire profil
@@ -191,3 +193,5 @@ Dernière mise à jour : 2026-02-07
 | 2026-02-07 | Phase 2.1-2.3 — Scaffolding frontend, layout, auth, setup, 12 routes, build OK |
 | 2026-02-07 | Phase 2.4 — Module Contacts : store, liste paginée, formulaire, détail, ConfirmDialog |
 | 2026-02-07 | Phase 2.5 — Module Documents : store, liste onglets, éditeur lignes, formulaire, détail + actions |
+| 2026-02-08 | Phase 2.6 — Module Trésorerie : store, liste paginée, formulaire, détail, ProofUploader, ProofBundle |
+| 2026-02-08 | Phase 2.7 — Dashboard URSSAF : store settings, store dashboard, vue complète, export CSV |

@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
 
-const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
 const toast = useToast()
@@ -27,7 +25,7 @@ async function handleLogin() {
       router.push(auth.setupComplete ? { name: 'dashboard' } : { name: 'setup' })
     }
   } catch {
-    toast.error(t('auth.error'))
+    toast.error('Identifiants incorrects. Veuillez réessayer.')
   } finally {
     loading.value = false
   }
@@ -42,19 +40,19 @@ async function handleLogin() {
         <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary-600 text-2xl font-bold text-white">
           S
         </div>
-        <h1 class="mt-4 text-2xl font-bold text-gray-900">{{ t('app.name') }}</h1>
-        <p class="mt-1 text-sm text-gray-500">{{ t('app.description') }}</p>
+        <h1 class="mt-4 text-2xl font-bold text-gray-900">Skuld</h1>
+        <p class="mt-1 text-sm text-gray-500">Gestion Auto-Entrepreneur</p>
       </div>
 
       <!-- Message magic link envoyé -->
       <div v-if="magicLinkSent" class="rounded-lg bg-green-50 p-4 text-center text-sm text-green-700">
-        {{ t('auth.magicLinkSent') }}
+        Un lien de connexion a été envoyé à votre adresse email.
       </div>
 
       <!-- Formulaire -->
       <form v-else class="space-y-4" @submit.prevent="handleLogin">
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">{{ t('auth.email') }}</label>
+          <label for="email" class="block text-sm font-medium text-gray-700">Adresse email</label>
           <input
             id="email"
             v-model="email"
@@ -66,7 +64,7 @@ async function handleLogin() {
         </div>
 
         <div v-if="!magicLinkMode">
-          <label for="password" class="block text-sm font-medium text-gray-700">{{ t('auth.password') }}</label>
+          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
           <input
             id="password"
             v-model="password"
@@ -82,7 +80,7 @@ async function handleLogin() {
           :disabled="loading"
           class="flex w-full justify-center rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {{ loading ? t('common.loading') : (magicLinkMode ? t('auth.magicLink') : t('auth.login')) }}
+          {{ loading ? 'Chargement...' : (magicLinkMode ? 'Recevoir un lien de connexion' : 'Se connecter') }}
         </button>
 
         <div class="text-center">
@@ -91,7 +89,7 @@ async function handleLogin() {
             class="text-sm text-primary-600 hover:text-primary-500"
             @click="magicLinkMode = !magicLinkMode"
           >
-            {{ magicLinkMode ? t('auth.login') : t('auth.magicLink') }}
+            {{ magicLinkMode ? 'Se connecter' : 'Recevoir un lien de connexion' }}
           </button>
         </div>
       </form>

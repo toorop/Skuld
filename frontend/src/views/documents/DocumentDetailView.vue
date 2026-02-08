@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useDocumentsStore } from '@/stores/documents'
 import { useToast } from '@/composables/useToast'
 import { ApiError, api } from '@/lib/api'
@@ -16,7 +15,11 @@ import {
   DocumentArrowDownIcon,
 } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
+const docTypeLabels: Record<string, string> = { QUOTE: 'Devis', INVOICE: 'Facture', CREDIT_NOTE: 'Avoir' }
+const statusLabels: Record<string, string> = { DRAFT: 'Brouillon', SENT: 'Envoyé', PAID: 'Payé', CANCELLED: 'Annulé' }
+const fiscalLabels: Record<string, string> = { BIC_VENTE: 'BIC Vente', BIC_PRESTA: 'BIC Presta', BNC: 'BNC' }
+const paymentLabels: Record<string, string> = { BANK_TRANSFER: 'Virement bancaire', CASH: 'Espèces', CHECK: 'Chèque', CARD: 'Carte bancaire', PAYPAL: 'PayPal', OTHER: 'Autre' }
+
 const route = useRoute()
 const router = useRouter()
 const store = useDocumentsStore()
@@ -46,11 +49,11 @@ async function handleSubmit(data: Record<string, unknown>) {
   saving.value = true
   try {
     await store.updateDocument(id.value, data)
-    toast.success(t('documents.saved'))
+    toast.success('Document enregistré.')
     editing.value = false
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     saving.value = false
   }
@@ -62,10 +65,10 @@ async function confirmSend() {
   actionLoading.value = true
   try {
     await store.sendDocument(id.value)
-    toast.success(t('documents.sent'))
+    toast.success('Document envoyé et numéroté.')
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     actionLoading.value = false
     showSendDialog.value = false
@@ -76,10 +79,10 @@ async function handlePay() {
   actionLoading.value = true
   try {
     await store.payDocument(id.value)
-    toast.success(t('documents.paid'))
+    toast.success('Document marqué comme payé.')
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     actionLoading.value = false
   }
@@ -89,7 +92,7 @@ async function confirmCancel() {
   actionLoading.value = true
   try {
     const result = await store.cancelDocument(id.value)
-    toast.success(t('documents.cancelled'))
+    toast.success('Document annulé.')
     if (result.message) {
       // Brouillon supprimé → retour à la liste
       router.push({ name: 'documents' })
@@ -99,7 +102,7 @@ async function confirmCancel() {
     }
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     actionLoading.value = false
     showCancelDialog.value = false
@@ -110,11 +113,11 @@ async function handleConvert() {
   actionLoading.value = true
   try {
     const invoice = await store.convertDocument(id.value)
-    toast.success(t('documents.converted'))
+    toast.success('Devis converti en facture.')
     router.push({ name: 'document-detail', params: { id: invoice.id } })
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     actionLoading.value = false
   }
@@ -132,7 +135,7 @@ async function downloadPdf() {
     URL.revokeObjectURL(url)
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   }
 }
 
@@ -173,7 +176,7 @@ function statusBadgeClass(status: string) {
       class="text-sm text-gray-500 hover:text-gray-700"
       @click="router.push({ name: 'documents' })"
     >
-      &larr; {{ t('common.back') }}
+      &larr; Retour
     </button>
 
     <!-- Chargement -->
@@ -188,14 +191,14 @@ function statusBadgeClass(status: string) {
       <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex items-center gap-3">
           <h1 class="text-2xl font-bold text-gray-900">
-            {{ t(`documents.types.${doc.docType}`) }}
+            {{ docTypeLabels[doc.docType] }}
             {{ doc.reference || '' }}
           </h1>
           <span
             class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium"
             :class="statusBadgeClass(doc.status)"
           >
-            {{ t(`documents.status.${doc.status}`) }}
+            {{ statusLabels[doc.status] }}
           </span>
         </div>
 
@@ -208,7 +211,7 @@ function statusBadgeClass(status: string) {
               @click="editing = true"
             >
               <PencilIcon class="h-4 w-4" />
-              {{ t('common.edit') }}
+              Modifier
             </button>
             <button
               :disabled="actionLoading"
@@ -216,14 +219,14 @@ function statusBadgeClass(status: string) {
               @click="showSendDialog = true"
             >
               <PaperAirplaneIcon class="h-4 w-4" />
-              {{ t('documents.actions.send') }}
+              Envoyer
             </button>
             <button
               class="inline-flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
               @click="showCancelDialog = true"
             >
               <XMarkIcon class="h-4 w-4" />
-              {{ t('common.delete') }}
+              Supprimer
             </button>
           </template>
 
@@ -235,14 +238,14 @@ function statusBadgeClass(status: string) {
               @click="handlePay"
             >
               <CurrencyEuroIcon class="h-4 w-4" />
-              {{ t('documents.actions.pay') }}
+              Marquer payé
             </button>
             <button
               class="inline-flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
               @click="showCancelDialog = true"
             >
               <XMarkIcon class="h-4 w-4" />
-              {{ t('documents.actions.cancel') }}
+              Annuler
             </button>
           </template>
 
@@ -253,7 +256,7 @@ function statusBadgeClass(status: string) {
               @click="showCancelDialog = true"
             >
               <XMarkIcon class="h-4 w-4" />
-              {{ t('documents.actions.cancel') }}
+              Annuler
             </button>
           </template>
 
@@ -265,7 +268,7 @@ function statusBadgeClass(status: string) {
             @click="handleConvert"
           >
             <ArrowPathIcon class="h-4 w-4" />
-            {{ t('documents.actions.convert') }}
+            Convertir en facture
           </button>
 
           <!-- PDF -->
@@ -275,7 +278,7 @@ function statusBadgeClass(status: string) {
             @click="downloadPdf"
           >
             <DocumentArrowDownIcon class="h-4 w-4" />
-            {{ t('documents.actions.downloadPdf') }}
+            Télécharger PDF
           </button>
         </div>
       </div>
@@ -296,7 +299,7 @@ function statusBadgeClass(status: string) {
         <div class="rounded-xl bg-white p-6 shadow-sm">
           <dl class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
             <div>
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.contact') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Contact</dt>
               <dd class="mt-1 text-sm text-gray-900">
                 <router-link
                   v-if="doc.contact"
@@ -309,21 +312,21 @@ function statusBadgeClass(status: string) {
               </dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.issuedDate') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Date d'émission</dt>
               <dd class="mt-1 text-sm text-gray-900">{{ formatDate(doc.issuedDate) }}</dd>
             </div>
             <div v-if="doc.dueDate">
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.dueDate') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Date d'échéance</dt>
               <dd class="mt-1 text-sm text-gray-900">{{ formatDate(doc.dueDate) }}</dd>
             </div>
             <div v-if="doc.paymentMethod">
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.paymentMethod') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Mode de paiement</dt>
               <dd class="mt-1 text-sm text-gray-900">
-                {{ t(`payment.${doc.paymentMethod}`) }}
+                {{ paymentLabels[doc.paymentMethod] }}
               </dd>
             </div>
             <div v-if="doc.paymentTermsDays">
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.paymentTerms') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Délai de paiement (jours)</dt>
               <dd class="mt-1 text-sm text-gray-900">{{ doc.paymentTermsDays }} jours</dd>
             </div>
           </dl>
@@ -331,28 +334,28 @@ function statusBadgeClass(status: string) {
 
         <!-- Lignes du document -->
         <div class="rounded-xl bg-white p-6 shadow-sm">
-          <h2 class="mb-4 text-lg font-semibold text-gray-900">{{ t('documents.lines') }}</h2>
+          <h2 class="mb-4 text-lg font-semibold text-gray-900">Lignes</h2>
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
                   <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">
-                    {{ t('documents.description') }}
+                    Description
                   </th>
                   <th class="px-4 py-2 text-right text-xs font-medium uppercase text-gray-500">
-                    {{ t('documents.quantity') }}
+                    Quantité
                   </th>
                   <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">
-                    {{ t('documents.unit') }}
+                    Unité
                   </th>
                   <th class="px-4 py-2 text-right text-xs font-medium uppercase text-gray-500">
-                    {{ t('documents.unitPrice') }}
+                    Prix unitaire
                   </th>
                   <th class="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">
-                    {{ t('documents.fiscalCategory') }}
+                    Catégorie fiscale
                   </th>
                   <th class="px-4 py-2 text-right text-xs font-medium uppercase text-gray-500">
-                    {{ t('documents.lineTotal') }}
+                    Total
                   </th>
                 </tr>
               </thead>
@@ -365,7 +368,7 @@ function statusBadgeClass(status: string) {
                     {{ formatCurrency(line.unitPrice) }}
                   </td>
                   <td class="px-4 py-2 text-sm text-gray-700">
-                    {{ t(`fiscal.${line.fiscalCategory}`) }}
+                    {{ fiscalLabels[line.fiscalCategory] }}
                   </td>
                   <td class="px-4 py-2 text-right text-sm font-medium text-gray-900">
                     {{ formatCurrency(line.total) }}
@@ -382,27 +385,27 @@ function statusBadgeClass(status: string) {
                 v-if="doc.totalBicVente > 0"
                 class="flex justify-between text-gray-600"
               >
-                <dt>{{ t('fiscal.BIC_VENTE') }}</dt>
+                <dt>BIC Vente</dt>
                 <dd>{{ formatCurrency(doc.totalBicVente) }}</dd>
               </div>
               <div
                 v-if="doc.totalBicPresta > 0"
                 class="flex justify-between text-gray-600"
               >
-                <dt>{{ t('fiscal.BIC_PRESTA') }}</dt>
+                <dt>BIC Presta</dt>
                 <dd>{{ formatCurrency(doc.totalBicPresta) }}</dd>
               </div>
               <div
                 v-if="doc.totalBnc > 0"
                 class="flex justify-between text-gray-600"
               >
-                <dt>{{ t('fiscal.BNC') }}</dt>
+                <dt>BNC</dt>
                 <dd>{{ formatCurrency(doc.totalBnc) }}</dd>
               </div>
               <div
                 class="flex justify-between border-t border-gray-200 pt-1 font-semibold text-gray-900"
               >
-                <dt>{{ t('documents.totalHt') }}</dt>
+                <dt>Total HT</dt>
                 <dd>{{ formatCurrency(doc.totalHt) }}</dd>
               </div>
             </dl>
@@ -416,15 +419,15 @@ function statusBadgeClass(status: string) {
         >
           <dl class="space-y-4">
             <div v-if="doc.notes">
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.notes') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Notes</dt>
               <dd class="mt-1 whitespace-pre-wrap text-sm text-gray-900">{{ doc.notes }}</dd>
             </div>
             <div v-if="doc.terms">
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.terms') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Conditions particulières</dt>
               <dd class="mt-1 whitespace-pre-wrap text-sm text-gray-900">{{ doc.terms }}</dd>
             </div>
             <div v-if="doc.footerText">
-              <dt class="text-sm font-medium text-gray-500">{{ t('documents.footerText') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Pied de page</dt>
               <dd class="mt-1 text-sm text-gray-900">{{ doc.footerText }}</dd>
             </div>
           </dl>
@@ -435,18 +438,18 @@ function statusBadgeClass(status: string) {
     <!-- Dialogs de confirmation -->
     <ConfirmDialog
       :open="showSendDialog"
-      :title="t('documents.actions.send')"
-      :message="t('documents.confirmSend')"
-      :confirm-label="t('documents.actions.send')"
+      title="Envoyer"
+      message="Envoyer ce document ? Il sera numéroté et ne pourra plus être modifié."
+      confirm-label="Envoyer"
       @confirm="confirmSend"
       @cancel="showSendDialog = false"
     />
 
     <ConfirmDialog
       :open="showCancelDialog"
-      :title="isDraft ? t('common.delete') : t('documents.actions.cancel')"
-      :message="isDraft ? t('contacts.deleteConfirm') : t('documents.confirmCancel')"
-      :confirm-label="isDraft ? t('common.delete') : t('documents.actions.cancel')"
+      :title="isDraft ? 'Supprimer' : 'Annuler'"
+      :message="isDraft ? 'Êtes-vous sûr de vouloir supprimer ce contact ?' : 'Annuler ce document ? Un avoir sera automatiquement créé.'"
+      :confirm-label="isDraft ? 'Supprimer' : 'Annuler'"
       destructive
       @confirm="confirmCancel"
       @cancel="showCancelDialog = false"

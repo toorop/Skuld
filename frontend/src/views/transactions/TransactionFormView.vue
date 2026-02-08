@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useTransactionsStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
 import TransactionForm from '@/components/TransactionForm.vue'
 
-const { t } = useI18n()
 const router = useRouter()
 const store = useTransactionsStore()
 const toast = useToast()
@@ -18,13 +16,13 @@ async function handleSubmit(data: Record<string, unknown>) {
   loading.value = true
   try {
     const tx = await store.createTransaction(data)
-    toast.success(t('transactions.saved'))
+    toast.success('Transaction enregistrée.')
     router.push({ name: 'transaction-detail', params: { id: tx.id } })
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     loading.value = false
@@ -43,9 +41,9 @@ function handleCancel() {
         class="text-sm text-gray-500 hover:text-gray-700"
         @click="handleCancel"
       >
-        &larr; {{ t('common.back') }}
+        &larr; Retour
       </button>
-      <h1 class="mt-2 text-2xl font-bold text-gray-900">{{ t('transactions.new') }}</h1>
+      <h1 class="mt-2 text-2xl font-bold text-gray-900">Nouvelle transaction</h1>
     </div>
 
     <div class="rounded-xl bg-white p-6 shadow-sm">

@@ -150,51 +150,52 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Validation formulaire setup avec VeeValidate + Zod
 
 ### 2.4 Contacts (Module A)
-- [ ] Page `/app/contacts` — Liste avec recherche, filtre par type
-- [ ] Composant `ContactList` — Tableau paginé
-- [ ] Page `/app/contacts/new` — Formulaire création
-- [ ] Page `/app/contacts/:id` — Fiche détail + édition
-- [ ] Composant `ContactForm` — Formulaire réutilisable (création/édition)
-- [ ] Store Pinia `contacts`
-- [ ] Validation formulaire avec Zod
+- [x] Page `/app/contacts` — Liste avec recherche, filtre par type
+- [x] Composant `ContactList` — Tableau paginé
+- [x] Page `/app/contacts/new` — Formulaire création
+- [x] Page `/app/contacts/:id` — Fiche détail + édition
+- [x] Composant `ContactForm` — Formulaire réutilisable (création/édition)
+- [x] Store Pinia `contacts`
+- [x] Validation formulaire avec Zod
 - [ ] **Tests** : composant ContactForm (validation, soumission)
 
 ### 2.5 Documents (Module B)
-- [ ] Page `/app/documents` — Liste avec onglets (Devis / Factures / Avoirs) + filtres status
-- [ ] Composant `DocumentList` — Tableau paginé avec badges status
-- [ ] Page `/app/documents/new` — Formulaire création document
-- [ ] Composant `DocumentForm` — En-tête (contact, dates, conditions)
-- [ ] Composant `DocumentLineEditor` — Éditeur de lignes dynamique (ajout/suppression/réordonnement)
-- [ ] Sélecteur de catégorie fiscale par ligne
-- [ ] Calcul temps réel des sous-totaux par catégorie
-- [ ] Page `/app/documents/:id` — Détail + édition (si DRAFT) + actions (envoyer, payer, annuler)
+- [x] Page `/app/documents` — Liste avec onglets (Devis / Factures / Avoirs) + filtres status
+- [x] Composant `DocumentList` — Tableau paginé avec badges status
+- [x] Page `/app/documents/new` — Formulaire création document
+- [x] Composant `DocumentForm` — En-tête (contact, dates, conditions)
+- [x] Composant `DocumentLineEditor` — Éditeur de lignes dynamique (ajout/suppression/réordonnement)
+- [x] Sélecteur de catégorie fiscale par ligne
+- [x] Calcul temps réel des sous-totaux par catégorie
+- [x] Page `/app/documents/:id` — Détail + édition (si DRAFT) + actions (envoyer, payer, annuler)
 - [ ] Page `/app/documents/:id/preview` — Aperçu PDF intégré
-- [ ] Bouton conversion Devis → Facture
-- [ ] Modale de confirmation pour les actions irréversibles (envoyer, annuler)
-- [ ] Store Pinia `documents`
+- [x] Bouton conversion Devis → Facture
+- [x] Modale de confirmation pour les actions irréversibles (envoyer, annuler)
+- [x] Store Pinia `documents`
 - [ ] **Tests** : DocumentLineEditor (ajout/suppression lignes, calculs totaux par catégorie fiscale)
 
 ### 2.6 Trésorerie (Module C)
-- [ ] Page `/app/transactions` — Liste avec filtres (période, direction, catégorie)
-- [ ] Composant `TransactionList` — Tableau avec indicateur de complétude des preuves
-- [ ] Page `/app/transactions/new` — Formulaire création (recette ou dépense)
-- [ ] Champ "Achat d'occasion" → affiche le bloc upload preuves
-- [ ] Composant `ProofUploader` — Zone de dépôt de fichiers (drag & drop)
-- [ ] Page `/app/transactions/:id` — Détail + gestion des preuves
-- [ ] Composant `ProofBundle` — État du dossier de preuves (checklist visuelle)
-- [ ] Bouton génération certificat de cession
-- [ ] Store Pinia `transactions`
+- [x] Page `/app/transactions` — Liste avec filtres (période, direction, catégorie)
+- [x] Composant `TransactionList` — Tableau avec indicateur de complétude des preuves
+- [x] Page `/app/transactions/new` — Formulaire création (recette ou dépense)
+- [x] Champ "Achat d'occasion" → affiche le bloc upload preuves
+- [x] Composant `ProofUploader` — Zone de dépôt de fichiers (drag & drop)
+- [x] Page `/app/transactions/:id` — Détail + gestion des preuves
+- [x] Composant `ProofBundle` — État du dossier de preuves (checklist visuelle)
+- [x] Bouton génération certificat de cession
+- [x] Store Pinia `transactions`
 - [ ] **Tests** : ProofUploader (validation fichier), ProofBundle (affichage complétude)
 
 ### 2.7 Dashboard URSSAF (Module D)
-- [ ] Page `/app/dashboard` — Vue principale
-- [ ] Composant `UrsaffTotals` — 3 cartes avec totaux BIC Vente / BIC Presta / BNC
-- [ ] Sélecteur de période (mois ou trimestre selon config)
-- [ ] Barre de progression vers les seuils URSSAF avec alerte visuelle
+- [x] Page `/app/dashboard` — Vue principale
+- [x] 3 cartes avec totaux BIC Vente / BIC Presta / BNC + barres de progression
+- [x] Sélecteur de période (mois ou trimestre selon config)
+- [x] Barre de progression vers les seuils URSSAF avec alerte visuelle
 - [ ] Historique des périodes passées (tableau récapitulatif)
-- [ ] Bouton export CSV
-- [ ] Store Pinia `dashboard`
-- [ ] **Tests** : UrsaffTotals (affichage correct des montants, alertes de seuil)
+- [x] Bouton export CSV
+- [x] Store Pinia `dashboard`
+- [x] Store Pinia `settings` (fetch/cache, réutilisable pour Phase 2.8)
+- [ ] **Tests** : DashboardView (affichage correct des montants, alertes de seuil)
 
 ### 2.8 Paramètres (Module E)
 - [ ] Page `/app/settings` — Formulaire édition profil

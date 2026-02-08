@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/24/outline'
-
-const { t } = useI18n()
 
 /** Entrée d'une ligne de document (sans id ni total calculé) */
 export interface LineInput {
@@ -78,7 +75,7 @@ function formatCurrency(amount: number): string {
 <template>
   <div>
     <label class="block text-sm font-medium text-gray-700 mb-2">
-      {{ t('documents.lines') }}
+      Lignes
     </label>
 
     <!-- Tableau des lignes -->
@@ -87,22 +84,22 @@ function formatCurrency(amount: number): string {
         <thead class="bg-gray-50">
           <tr>
             <th class="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500">
-              {{ t('documents.description') }}
+              Description
             </th>
             <th class="px-3 py-2 text-right text-xs font-medium uppercase text-gray-500 w-20">
-              {{ t('documents.quantity') }}
+              Quantité
             </th>
             <th class="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500 w-20">
-              {{ t('documents.unit') }}
+              Unité
             </th>
             <th class="px-3 py-2 text-right text-xs font-medium uppercase text-gray-500 w-28">
-              {{ t('documents.unitPrice') }}
+              Prix unitaire
             </th>
             <th class="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500 w-32">
-              {{ t('documents.fiscalCategory') }}
+              Catégorie fiscale
             </th>
             <th class="px-3 py-2 text-right text-xs font-medium uppercase text-gray-500 w-24">
-              {{ t('documents.lineTotal') }}
+              Total
             </th>
             <th class="px-3 py-2 w-10"></th>
           </tr>
@@ -198,7 +195,7 @@ function formatCurrency(amount: number): string {
       @click="addLine"
     >
       <PlusIcon class="h-4 w-4" />
-      {{ t('documents.addLine') }}
+      Ajouter une ligne
     </button>
 
     <!-- Sous-totaux -->
@@ -208,24 +205,24 @@ function formatCurrency(amount: number): string {
           v-if="subtotals.bicVente > 0"
           class="flex justify-between text-gray-600"
         >
-          <dt>{{ t('fiscal.BIC_VENTE') }}</dt>
+          <dt>BIC Vente</dt>
           <dd>{{ formatCurrency(subtotals.bicVente) }}</dd>
         </div>
         <div
           v-if="subtotals.bicPresta > 0"
           class="flex justify-between text-gray-600"
         >
-          <dt>{{ t('fiscal.BIC_PRESTA') }}</dt>
+          <dt>BIC Presta</dt>
           <dd>{{ formatCurrency(subtotals.bicPresta) }}</dd>
         </div>
         <div v-if="subtotals.bnc > 0" class="flex justify-between text-gray-600">
-          <dt>{{ t('fiscal.BNC') }}</dt>
+          <dt>BNC</dt>
           <dd>{{ formatCurrency(subtotals.bnc) }}</dd>
         </div>
         <div
           class="flex justify-between border-t border-gray-200 pt-1 font-semibold text-gray-900"
         >
-          <dt>{{ t('documents.totalHt') }}</dt>
+          <dt>Total HT</dt>
           <dd>{{ formatCurrency(subtotals.total) }}</dd>
         </div>
       </dl>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useTransactionsStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
@@ -11,7 +10,6 @@ import {
   ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
 const store = useTransactionsStore()
 const toast = useToast()
 
@@ -52,13 +50,13 @@ async function handleFile(file: File) {
   uploading.value = true
   try {
     const proof = await store.uploadProof(props.bundleId, props.proofType, file)
-    toast.success(t('transactions.proofs.uploaded'))
+    toast.success('Fichier déposé avec succès.')
     emit('uploaded', proof)
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     uploading.value = false
@@ -99,7 +97,7 @@ async function handleDownload() {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   }
 }
@@ -119,7 +117,7 @@ async function handleDownload() {
       <button
         type="button"
         class="rounded p-1 text-green-600 hover:bg-green-100"
-        :title="t('transactions.proofs.downloading')"
+        title="Télécharger"
         @click="handleDownload"
       >
         <ArrowDownTrayIcon class="h-4 w-4" />
@@ -147,8 +145,8 @@ async function handleDownload() {
       </div>
       <template v-else>
         <ArrowUpTrayIcon class="mx-auto h-8 w-8 text-gray-400" />
-        <p class="mt-2 text-sm text-gray-600">{{ t('transactions.proofs.upload') }}</p>
-        <p class="mt-1 text-xs text-gray-400">{{ t('transactions.proofs.fileHint') }}</p>
+        <p class="mt-2 text-sm text-gray-600">Déposer un fichier</p>
+        <p class="mt-1 text-xs text-gray-400">JPEG, PNG, WebP ou PDF — max 5 Mo</p>
       </template>
       <input
         ref="fileInput"

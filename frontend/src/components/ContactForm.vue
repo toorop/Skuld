@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { contactCreateSchema } from '@skuld/shared'
 import type { Contact } from '@skuld/shared'
-
-const { t } = useI18n()
 
 const props = defineProps<{
   contact?: Contact | null
@@ -110,7 +107,7 @@ function handleSubmit() {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div class="sm:col-span-2">
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('contacts.displayName') }} *
+          Nom affiché *
         </label>
         <input
           v-model="form.displayName"
@@ -125,14 +122,14 @@ function handleSubmit() {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.type') }}</label>
+        <label class="block text-sm font-medium text-gray-700">Type</label>
         <select
           v-model="form.type"
           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         >
-          <option value="CLIENT">{{ t('contacts.types.CLIENT') }}</option>
-          <option value="SUPPLIER">{{ t('contacts.types.SUPPLIER') }}</option>
-          <option value="BOTH">{{ t('contacts.types.BOTH') }}</option>
+          <option value="CLIENT">Client</option>
+          <option value="SUPPLIER">Fournisseur</option>
+          <option value="BOTH">Client &amp; Fournisseur</option>
         </select>
       </div>
 
@@ -143,12 +140,12 @@ function handleSubmit() {
             type="checkbox"
             class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
           />
-          {{ t('contacts.isIndividual') }}
+          Particulier
         </label>
       </div>
 
       <div v-if="!form.isIndividual">
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.legalName') }}</label>
+        <label class="block text-sm font-medium text-gray-700">Raison sociale</label>
         <input
           v-model="form.legalName"
           type="text"
@@ -157,7 +154,7 @@ function handleSubmit() {
       </div>
 
       <div v-if="!form.isIndividual">
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.siren') }}</label>
+        <label class="block text-sm font-medium text-gray-700">SIREN</label>
         <input
           v-model="form.siren"
           type="text"
@@ -173,7 +170,7 @@ function handleSubmit() {
     <!-- Contact -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.email') }}</label>
+        <label class="block text-sm font-medium text-gray-700">Email</label>
         <input
           v-model="form.email"
           type="email"
@@ -184,7 +181,7 @@ function handleSubmit() {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.phone') }}</label>
+        <label class="block text-sm font-medium text-gray-700">Telephone</label>
         <input
           v-model="form.phone"
           type="tel"
@@ -197,7 +194,7 @@ function handleSubmit() {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div class="sm:col-span-2">
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('contacts.addressLine1') }}
+          Adresse (ligne 1)
         </label>
         <input
           v-model="form.addressLine1"
@@ -208,7 +205,7 @@ function handleSubmit() {
 
       <div class="sm:col-span-2">
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('contacts.addressLine2') }}
+          Adresse (ligne 2)
         </label>
         <input
           v-model="form.addressLine2"
@@ -219,7 +216,7 @@ function handleSubmit() {
 
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('contacts.postalCode') }}
+          Code postal
         </label>
         <input
           v-model="form.postalCode"
@@ -230,7 +227,7 @@ function handleSubmit() {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.city') }}</label>
+        <label class="block text-sm font-medium text-gray-700">Ville</label>
         <input
           v-model="form.city"
           type="text"
@@ -239,7 +236,7 @@ function handleSubmit() {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">{{ t('contacts.country') }}</label>
+        <label class="block text-sm font-medium text-gray-700">Code pays</label>
         <input
           v-model="form.country"
           type="text"
@@ -252,7 +249,7 @@ function handleSubmit() {
 
     <!-- Notes -->
     <div>
-      <label class="block text-sm font-medium text-gray-700">{{ t('contacts.notes') }}</label>
+      <label class="block text-sm font-medium text-gray-700">Notes</label>
       <textarea
         v-model="form.notes"
         rows="3"
@@ -273,14 +270,14 @@ function handleSubmit() {
         class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         @click="emit('cancel')"
       >
-        {{ t('common.cancel') }}
+        Annuler
       </button>
       <button
         type="submit"
         :disabled="loading"
         class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50"
       >
-        {{ loading ? t('common.loading') : t('common.save') }}
+        {{ loading ? 'Chargement...' : 'Enregistrer' }}
       </button>
     </div>
   </form>

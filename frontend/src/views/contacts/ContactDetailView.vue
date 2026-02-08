@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useContactsStore } from '@/stores/contacts'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
@@ -9,7 +8,12 @@ import ContactForm from '@/components/ContactForm.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
+const contactTypeLabels: Record<string, string> = {
+  CLIENT: 'Client',
+  SUPPLIER: 'Fournisseur',
+  BOTH: 'Client & Fournisseur',
+}
+
 const route = useRoute()
 const router = useRouter()
 const store = useContactsStore()
@@ -30,13 +34,13 @@ async function handleSubmit(data: Record<string, unknown>) {
   saving.value = true
   try {
     await store.updateContact(id.value, data)
-    toast.success(t('contacts.saved'))
+    toast.success('Contact enregistre.')
     editing.value = false
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     saving.value = false
@@ -47,13 +51,13 @@ async function confirmDelete() {
   deleting.value = true
   try {
     await store.deleteContact(id.value)
-    toast.success(t('contacts.deleted'))
+    toast.success('Contact supprime.')
     router.push({ name: 'contacts' })
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     deleting.value = false
@@ -79,7 +83,7 @@ function formatAddress(c: typeof store.currentContact) {
       class="text-sm text-gray-500 hover:text-gray-700"
       @click="router.push({ name: 'contacts' })"
     >
-      &larr; {{ t('common.back') }}
+      &larr; Retour
     </button>
 
     <!-- Chargement -->
@@ -102,14 +106,14 @@ function formatAddress(c: typeof store.currentContact) {
             @click="editing = true"
           >
             <PencilIcon class="h-4 w-4" />
-            {{ t('common.edit') }}
+            Modifier
           </button>
           <button
             class="inline-flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
             @click="showDeleteDialog = true"
           >
             <TrashIcon class="h-4 w-4" />
-            {{ t('common.delete') }}
+            Supprimer
           </button>
         </div>
       </div>
@@ -128,31 +132,31 @@ function formatAddress(c: typeof store.currentContact) {
       <div v-else class="mt-6 rounded-xl bg-white p-6 shadow-sm">
         <dl class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
           <div>
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.type') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Type</dt>
             <dd class="mt-1 text-sm text-gray-900">
-              {{ t(`contacts.types.${store.currentContact.type}`) }}
+              {{ contactTypeLabels[store.currentContact.type] }}
             </dd>
           </div>
 
           <div>
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.isIndividual') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Particulier</dt>
             <dd class="mt-1 text-sm text-gray-900">
               {{ store.currentContact.isIndividual ? 'Oui' : 'Non' }}
             </dd>
           </div>
 
           <div v-if="store.currentContact.legalName">
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.legalName') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Raison sociale</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ store.currentContact.legalName }}</dd>
           </div>
 
           <div v-if="store.currentContact.siren">
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.siren') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">SIREN</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ store.currentContact.siren }}</dd>
           </div>
 
           <div v-if="store.currentContact.email">
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.email') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Email</dt>
             <dd class="mt-1 text-sm text-gray-900">
               <a
                 :href="`mailto:${store.currentContact.email}`"
@@ -164,7 +168,7 @@ function formatAddress(c: typeof store.currentContact) {
           </div>
 
           <div v-if="store.currentContact.phone">
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.phone') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Telephone</dt>
             <dd class="mt-1 text-sm text-gray-900">
               <a
                 :href="`tel:${store.currentContact.phone}`"
@@ -176,14 +180,14 @@ function formatAddress(c: typeof store.currentContact) {
           </div>
 
           <div v-if="formatAddress(store.currentContact)" class="sm:col-span-2">
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.address') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Adresse</dt>
             <dd class="mt-1 text-sm text-gray-900">
               {{ formatAddress(store.currentContact) }}
             </dd>
           </div>
 
           <div v-if="store.currentContact.notes" class="sm:col-span-2">
-            <dt class="text-sm font-medium text-gray-500">{{ t('contacts.notes') }}</dt>
+            <dt class="text-sm font-medium text-gray-500">Notes</dt>
             <dd class="mt-1 whitespace-pre-wrap text-sm text-gray-900">
               {{ store.currentContact.notes }}
             </dd>
@@ -195,9 +199,9 @@ function formatAddress(c: typeof store.currentContact) {
     <!-- Dialog suppression -->
     <ConfirmDialog
       :open="showDeleteDialog"
-      :title="t('contacts.delete')"
-      :message="t('contacts.deleteConfirm')"
-      :confirm-label="t('common.delete')"
+      title="Supprimer"
+      message="Etes-vous sur de vouloir supprimer ce contact ?"
+      confirm-label="Supprimer"
       destructive
       @confirm="confirmDelete"
       @cancel="showDeleteDialog = false"

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useTransactionsStore } from '@/stores/transactions'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
@@ -10,7 +9,10 @@ import ProofBundleComponent from '@/components/ProofBundle.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
+const directionLabels: Record<string, string> = { INCOME: 'Recette', EXPENSE: 'Dépense' }
+const fiscalLabels: Record<string, string> = { BIC_VENTE: 'BIC Vente', BIC_PRESTA: 'BIC Presta', BNC: 'BNC' }
+const paymentLabels: Record<string, string> = { BANK_TRANSFER: 'Virement bancaire', CASH: 'Espèces', CHECK: 'Chèque', CARD: 'Carte bancaire', PAYPAL: 'PayPal', OTHER: 'Autre' }
+
 const route = useRoute()
 const router = useRouter()
 const store = useTransactionsStore()
@@ -34,11 +36,11 @@ async function handleSubmit(data: Record<string, unknown>) {
   saving.value = true
   try {
     await store.updateTransaction(id.value, data)
-    toast.success(t('transactions.saved'))
+    toast.success('Transaction enregistrée.')
     editing.value = false
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     saving.value = false
   }
@@ -48,11 +50,11 @@ async function confirmDelete() {
   actionLoading.value = true
   try {
     await store.deleteTransaction(id.value)
-    toast.success(t('transactions.deleted'))
+    toast.success('Transaction supprimée.')
     router.push({ name: 'transactions' })
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
-    else toast.error(t('common.error'))
+    else toast.error('Une erreur est survenue.')
   } finally {
     actionLoading.value = false
     showDeleteDialog.value = false
@@ -92,7 +94,7 @@ function directionBadgeClass(direction: string) {
       class="text-sm text-gray-500 hover:text-gray-700"
       @click="router.push({ name: 'transactions' })"
     >
-      &larr; {{ t('common.back') }}
+      &larr; Retour
     </button>
 
     <!-- Chargement -->
@@ -111,7 +113,7 @@ function directionBadgeClass(direction: string) {
             class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium"
             :class="directionBadgeClass(tx.direction)"
           >
-            {{ t(`transactions.directions.${tx.direction}`) }}
+            {{ directionLabels[tx.direction] }}
           </span>
         </div>
 
@@ -122,14 +124,14 @@ function directionBadgeClass(direction: string) {
             @click="editing = true"
           >
             <PencilIcon class="h-4 w-4" />
-            {{ t('common.edit') }}
+            Modifier
           </button>
           <button
             class="inline-flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
             @click="showDeleteDialog = true"
           >
             <TrashIcon class="h-4 w-4" />
-            {{ t('common.delete') }}
+            Supprimer
           </button>
         </div>
       </div>
@@ -150,36 +152,36 @@ function directionBadgeClass(direction: string) {
         <div class="rounded-xl bg-white p-6 shadow-sm">
           <dl class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
             <div>
-              <dt class="text-sm font-medium text-gray-500">{{ t('transactions.date') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Date</dt>
               <dd class="mt-1 text-sm text-gray-900">{{ formatDate(tx.date) }}</dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500">{{ t('transactions.amount') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Montant</dt>
               <dd class="mt-1 text-sm font-semibold text-gray-900">
                 {{ formatCurrency(tx.amount) }}
               </dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500">{{ t('transactions.direction') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Direction</dt>
               <dd class="mt-1">
                 <span
                   class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
                   :class="directionBadgeClass(tx.direction)"
                 >
-                  {{ t(`transactions.directions.${tx.direction}`) }}
+                  {{ directionLabels[tx.direction] }}
                 </span>
               </dd>
             </div>
             <div v-if="tx.fiscalCategory">
-              <dt class="text-sm font-medium text-gray-500">{{ t('transactions.fiscalCategory') }}</dt>
-              <dd class="mt-1 text-sm text-gray-900">{{ t(`fiscal.${tx.fiscalCategory}`) }}</dd>
+              <dt class="text-sm font-medium text-gray-500">Catégorie fiscale</dt>
+              <dd class="mt-1 text-sm text-gray-900">{{ fiscalLabels[tx.fiscalCategory!] }}</dd>
             </div>
             <div v-if="tx.paymentMethod">
-              <dt class="text-sm font-medium text-gray-500">{{ t('transactions.paymentMethod') }}</dt>
-              <dd class="mt-1 text-sm text-gray-900">{{ t(`payment.${tx.paymentMethod}`) }}</dd>
+              <dt class="text-sm font-medium text-gray-500">Mode de paiement</dt>
+              <dd class="mt-1 text-sm text-gray-900">{{ paymentLabels[tx.paymentMethod!] }}</dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500">{{ t('transactions.contact') }}</dt>
+              <dt class="text-sm font-medium text-gray-500">Contact</dt>
               <dd class="mt-1 text-sm text-gray-900">
                 <router-link
                   v-if="tx.contact"
@@ -199,7 +201,7 @@ function directionBadgeClass(direction: string) {
           v-if="tx.notes"
           class="rounded-xl bg-white p-6 shadow-sm"
         >
-          <dt class="text-sm font-medium text-gray-500">{{ t('transactions.notes') }}</dt>
+          <dt class="text-sm font-medium text-gray-500">Notes</dt>
           <dd class="mt-1 whitespace-pre-wrap text-sm text-gray-900">{{ tx.notes }}</dd>
         </div>
 
@@ -220,9 +222,9 @@ function directionBadgeClass(direction: string) {
     <!-- Dialog de confirmation de suppression -->
     <ConfirmDialog
       :open="showDeleteDialog"
-      :title="t('transactions.delete')"
-      :message="t('transactions.deleteConfirm')"
-      :confirm-label="t('common.delete')"
+      title="Supprimer"
+      message="Êtes-vous sûr de vouloir supprimer cette transaction ?"
+      confirm-label="Supprimer"
       destructive
       @confirm="confirmDelete"
       @cancel="showDeleteDialog = false"

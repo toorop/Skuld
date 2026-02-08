@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
 
@@ -26,7 +24,7 @@ async function handleLogout() {
         @click="handleLogout"
       >
         <ArrowRightOnRectangleIcon class="h-4 w-4" />
-        {{ t('nav.logout') }}
+        Se déconnecter
       </button>
     </div>
   </header>

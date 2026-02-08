@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useDocumentsStore } from '@/stores/documents'
 import { PlusIcon } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
 const router = useRouter()
 const store = useDocumentsStore()
+
+const docTypeLabels: Record<string, string> = { QUOTE: 'Devis', INVOICE: 'Facture', CREDIT_NOTE: 'Avoir' }
+const statusLabels: Record<string, string> = { DRAFT: 'Brouillon', SENT: 'Envoyé', PAID: 'Payé', CANCELLED: 'Annulé' }
 
 const typeFilter = ref('')
 const statusFilter = ref('')
@@ -87,13 +88,13 @@ function formatDate(iso: string): string {
   <div>
     <!-- En-tête -->
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-900">{{ t('documents.title') }}</h1>
+      <h1 class="text-2xl font-bold text-gray-900">Documents</h1>
       <router-link
         :to="{ path: '/app/documents/new', query: typeFilter ? { type: typeFilter } : {} }"
         class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
       >
         <PlusIcon class="h-4 w-4" />
-        {{ t('documents.new') }}
+        Nouveau document
       </router-link>
     </div>
 
@@ -137,7 +138,7 @@ function formatDate(iso: string): string {
       v-else-if="store.documents.length === 0"
       class="mt-12 text-center text-sm text-gray-500"
     >
-      {{ t('documents.empty') }}
+      Aucun document pour le moment.
     </div>
 
     <!-- Tableau -->
@@ -149,22 +150,22 @@ function formatDate(iso: string): string {
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('documents.reference') }}
+                Référence
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('documents.contact') }}
+                Contact
               </th>
               <th
                 class="hidden px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 sm:table-cell"
               >
-                {{ t('documents.issuedDate') }}
+                Date d'émission
               </th>
               <th
                 class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('documents.totalHt') }}
+                Total HT
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -186,7 +187,7 @@ function formatDate(iso: string): string {
                     class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
                     :class="docTypeBadgeClass(doc.docType)"
                   >
-                    {{ t(`documents.types.${doc.docType}`) }}
+                    {{ docTypeLabels[doc.docType] }}
                   </span>
                   <span class="font-medium text-gray-900">
                     {{ doc.reference || 'Brouillon' }}
@@ -211,7 +212,7 @@ function formatDate(iso: string): string {
                   class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
                   :class="statusBadgeClass(doc.status)"
                 >
-                  {{ t(`documents.status.${doc.status}`) }}
+                  {{ statusLabels[doc.status] }}
                 </span>
               </td>
             </tr>

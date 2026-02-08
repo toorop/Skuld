@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { transactionCreateSchema } from '@skuld/shared'
 import type { Transaction } from '@skuld/shared'
 import { api } from '@/lib/api'
-
-const { t } = useI18n()
 
 const props = defineProps<{
   transaction?: Transaction | null
@@ -117,7 +114,7 @@ function handleSubmit() {
       <!-- Date -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('transactions.date') }} *
+          Date *
         </label>
         <input
           v-model="form.date"
@@ -132,7 +129,7 @@ function handleSubmit() {
       <!-- Montant -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('transactions.amount') }} *
+          Montant *
         </label>
         <input
           v-model.number="form.amount"
@@ -149,14 +146,14 @@ function handleSubmit() {
       <!-- Direction -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('transactions.direction') }} *
+          Direction *
         </label>
         <select
           v-model="form.direction"
           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         >
-          <option value="INCOME">{{ t('transactions.directions.INCOME') }}</option>
-          <option value="EXPENSE">{{ t('transactions.directions.EXPENSE') }}</option>
+          <option value="INCOME">Recette</option>
+          <option value="EXPENSE">Dépense</option>
         </select>
       </div>
     </div>
@@ -164,7 +161,7 @@ function handleSubmit() {
     <!-- Libellé (pleine largeur) -->
     <div>
       <label class="block text-sm font-medium text-gray-700">
-        {{ t('transactions.label') }} *
+        Libellé *
       </label>
       <input
         v-model="form.label"
@@ -182,42 +179,42 @@ function handleSubmit() {
       <!-- Catégorie fiscale -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('transactions.fiscalCategory') }}
+          Catégorie fiscale
         </label>
         <select
           v-model="form.fiscalCategory"
           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         >
           <option value="">—</option>
-          <option value="BIC_VENTE">{{ t('fiscal.BIC_VENTE') }}</option>
-          <option value="BIC_PRESTA">{{ t('fiscal.BIC_PRESTA') }}</option>
-          <option value="BNC">{{ t('fiscal.BNC') }}</option>
+          <option value="BIC_VENTE">BIC Vente</option>
+          <option value="BIC_PRESTA">BIC Presta</option>
+          <option value="BNC">BNC</option>
         </select>
       </div>
 
       <!-- Mode de paiement -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('transactions.paymentMethod') }}
+          Mode de paiement
         </label>
         <select
           v-model="form.paymentMethod"
           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         >
           <option value="">—</option>
-          <option value="BANK_TRANSFER">{{ t('payment.BANK_TRANSFER') }}</option>
-          <option value="CASH">{{ t('payment.CASH') }}</option>
-          <option value="CHECK">{{ t('payment.CHECK') }}</option>
-          <option value="CARD">{{ t('payment.CARD') }}</option>
-          <option value="PAYPAL">{{ t('payment.PAYPAL') }}</option>
-          <option value="OTHER">{{ t('payment.OTHER') }}</option>
+          <option value="BANK_TRANSFER">Virement bancaire</option>
+          <option value="CASH">Espèces</option>
+          <option value="CHECK">Chèque</option>
+          <option value="CARD">Carte bancaire</option>
+          <option value="PAYPAL">PayPal</option>
+          <option value="OTHER">Autre</option>
         </select>
       </div>
 
       <!-- Contact -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('transactions.contact') }}
+          Contact
         </label>
         <select
           v-model="form.contactId"
@@ -240,13 +237,13 @@ function handleSubmit() {
           type="checkbox"
           class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
         />
-        {{ t('transactions.isSecondHand') }}
+        Achat d'occasion
       </label>
     </div>
 
     <!-- Notes -->
     <div>
-      <label class="block text-sm font-medium text-gray-700">{{ t('transactions.notes') }}</label>
+      <label class="block text-sm font-medium text-gray-700">Notes</label>
       <textarea
         v-model="form.notes"
         rows="3"
@@ -267,14 +264,14 @@ function handleSubmit() {
         class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         @click="emit('cancel')"
       >
-        {{ t('common.cancel') }}
+        Annuler
       </button>
       <button
         type="submit"
         :disabled="loading"
         class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50"
       >
-        {{ loading ? t('common.loading') : t('common.save') }}
+        {{ loading ? 'Chargement...' : 'Enregistrer' }}
       </button>
     </div>
   </form>

@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useContactsStore } from '@/stores/contacts'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
 const router = useRouter()
 const store = useContactsStore()
 const toast = useToast()
@@ -48,17 +46,23 @@ async function confirmDelete() {
   deleting.value = true
   try {
     await store.deleteContact(deleteId.value)
-    toast.success(t('contacts.deleted'))
+    toast.success('Contact supprime.')
   } catch (err) {
     if (err instanceof ApiError) {
       toast.error(err.message)
     } else {
-      toast.error(t('common.error'))
+      toast.error('Une erreur est survenue.')
     }
   } finally {
     deleting.value = false
     deleteId.value = null
   }
+}
+
+const contactTypeLabels: Record<string, string> = {
+  CLIENT: 'Client',
+  SUPPLIER: 'Fournisseur',
+  BOTH: 'Client & Fournisseur',
 }
 
 const typeFilters = [
@@ -86,13 +90,13 @@ function typeBadgeClass(type: string) {
   <div>
     <!-- En-tête -->
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-900">{{ t('contacts.title') }}</h1>
+      <h1 class="text-2xl font-bold text-gray-900">Contacts</h1>
       <router-link
         to="/app/contacts/new"
         class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
       >
         <PlusIcon class="h-4 w-4" />
-        {{ t('contacts.new') }}
+        Nouveau contact
       </router-link>
     </div>
 
@@ -105,7 +109,7 @@ function typeBadgeClass(type: string) {
         <input
           v-model="search"
           type="text"
-          :placeholder="t('contacts.search')"
+          placeholder="Rechercher un contact..."
           class="block w-full rounded-lg border-gray-300 pl-10 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
           @input="onSearchInput"
         />
@@ -139,7 +143,7 @@ function typeBadgeClass(type: string) {
       v-else-if="store.contacts.length === 0"
       class="mt-12 text-center text-sm text-gray-500"
     >
-      {{ t('contacts.empty') }}
+      Aucun contact pour le moment.
     </div>
 
     <!-- Tableau -->
@@ -151,32 +155,32 @@ function typeBadgeClass(type: string) {
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('contacts.displayName') }}
+                Nom affiche
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('contacts.type') }}
+                Type
               </th>
               <th
                 class="hidden px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 sm:table-cell"
               >
-                {{ t('contacts.email') }}
+                Email
               </th>
               <th
                 class="hidden px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 md:table-cell"
               >
-                {{ t('contacts.phone') }}
+                Telephone
               </th>
               <th
                 class="hidden px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 lg:table-cell"
               >
-                {{ t('contacts.city') }}
+                Ville
               </th>
               <th
                 class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                {{ t('common.actions') }}
+                Actions
               </th>
             </tr>
           </thead>
@@ -195,7 +199,7 @@ function typeBadgeClass(type: string) {
                   class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
                   :class="typeBadgeClass(contact.type)"
                 >
-                  {{ t(`contacts.types.${contact.type}`) }}
+                  {{ contactTypeLabels[contact.type] }}
                 </span>
               </td>
               <td
@@ -216,7 +220,7 @@ function typeBadgeClass(type: string) {
               <td class="whitespace-nowrap px-4 py-3 text-right text-sm" @click.stop>
                 <button
                   class="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
-                  :title="t('contacts.delete')"
+                  title="Supprimer"
                   @click="deleteId = contact.id"
                 >
                   <TrashIcon class="h-4 w-4" />
@@ -258,9 +262,9 @@ function typeBadgeClass(type: string) {
     <!-- Dialog de confirmation de suppression -->
     <ConfirmDialog
       :open="!!deleteId"
-      :title="t('contacts.delete')"
-      :message="t('contacts.deleteConfirm')"
-      :confirm-label="t('common.delete')"
+      title="Supprimer"
+      message="Etes-vous sur de vouloir supprimer ce contact ?"
+      confirm-label="Supprimer"
       destructive
       @confirm="confirmDelete"
       @cancel="deleteId = null"

@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { documentCreateSchema } from '@skuld/shared'
 import type { DocumentWithLines } from '@skuld/shared'
 import { api } from '@/lib/api'
 import DocumentLineEditor from './DocumentLineEditor.vue'
 import type { LineInput } from './DocumentLineEditor.vue'
-
-const { t } = useI18n()
 
 const props = defineProps<{
   document?: DocumentWithLines | null
@@ -149,16 +146,16 @@ const isEditing = !!props.document
           v-model="form.docType"
           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         >
-          <option value="QUOTE">{{ t('documents.types.QUOTE') }}</option>
-          <option value="INVOICE">{{ t('documents.types.INVOICE') }}</option>
-          <option value="CREDIT_NOTE">{{ t('documents.types.CREDIT_NOTE') }}</option>
+          <option value="QUOTE">Devis</option>
+          <option value="INVOICE">Facture</option>
+          <option value="CREDIT_NOTE">Avoir</option>
         </select>
       </div>
 
       <!-- Contact -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('documents.contact') }} *
+          Contact *
         </label>
         <select
           v-model="form.contactId"
@@ -184,7 +181,7 @@ const isEditing = !!props.document
       <!-- Date d'émission -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('documents.issuedDate') }}
+          Date d'émission
         </label>
         <input
           v-model="form.issuedDate"
@@ -198,24 +195,24 @@ const isEditing = !!props.document
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('documents.paymentMethod') }}
+          Mode de paiement
         </label>
         <select
           v-model="form.paymentMethod"
           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         >
-          <option value="BANK_TRANSFER">{{ t('payment.BANK_TRANSFER') }}</option>
-          <option value="CASH">{{ t('payment.CASH') }}</option>
-          <option value="CHECK">{{ t('payment.CHECK') }}</option>
-          <option value="CARD">{{ t('payment.CARD') }}</option>
-          <option value="PAYPAL">{{ t('payment.PAYPAL') }}</option>
-          <option value="OTHER">{{ t('payment.OTHER') }}</option>
+          <option value="BANK_TRANSFER">Virement bancaire</option>
+          <option value="CASH">Espèces</option>
+          <option value="CHECK">Chèque</option>
+          <option value="CARD">Carte bancaire</option>
+          <option value="PAYPAL">PayPal</option>
+          <option value="OTHER">Autre</option>
         </select>
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('documents.paymentTerms') }}
+          Délai de paiement (jours)
         </label>
         <input
           v-model.number="form.paymentTermsDays"
@@ -228,7 +225,7 @@ const isEditing = !!props.document
 
       <div>
         <label class="block text-sm font-medium text-gray-700">
-          {{ t('documents.dueDate') }}
+          Date d'échéance
         </label>
         <input
           v-model="form.dueDate"
@@ -252,7 +249,7 @@ const isEditing = !!props.document
       <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="sm:col-span-2">
           <label class="block text-sm font-medium text-gray-700">
-            {{ t('documents.notes') }}
+            Notes
           </label>
           <textarea
             v-model="form.notes"
@@ -263,7 +260,7 @@ const isEditing = !!props.document
         </div>
         <div class="sm:col-span-2">
           <label class="block text-sm font-medium text-gray-700">
-            {{ t('documents.terms') }}
+            Conditions particulières
           </label>
           <textarea
             v-model="form.terms"
@@ -274,7 +271,7 @@ const isEditing = !!props.document
         </div>
         <div class="sm:col-span-2">
           <label class="block text-sm font-medium text-gray-700">
-            {{ t('documents.footerText') }}
+            Pied de page
           </label>
           <input
             v-model="form.footerText"
@@ -303,14 +300,14 @@ const isEditing = !!props.document
         class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         @click="emit('cancel')"
       >
-        {{ t('common.cancel') }}
+        Annuler
       </button>
       <button
         type="submit"
         :disabled="loading"
         class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50"
       >
-        {{ loading ? t('common.loading') : t('common.save') }}
+        {{ loading ? 'Chargement...' : 'Enregistrer' }}
       </button>
     </div>
   </form>
