@@ -11,7 +11,7 @@ Dernière mise à jour : 2026-02-09
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 100%       | Terminé      |
-| 3     | Intégration, E2E & Polish    | 50%        | En cours     |
+| 3     | Intégration, E2E & Polish    | 70%        | En cours     |
 | 4     | Post-MVP                     | —          | Futur        |
 
 ---
@@ -208,7 +208,12 @@ Dernière mise à jour : 2026-02-09
   - Mention légale « Article 321-1 du Code penal »
 
 ### 3.4 Responsive & UX
-- [ ] Mobile, états vides, messages FR, feedback
+- [x] Sidebar mobile : drawer avec overlay + Transition, bouton hamburger (`AuthLayout`, `AppSidebar`, `AppHeader`)
+- [x] Header responsive : email et texte déconnexion cachés sur mobile, padding adaptatif
+- [x] Toasts mobile : pleine largeur sur petit écran (`AppToast`)
+- [x] Empty states améliorés : icône + texte + CTA (contacts, documents, transactions, dashboard)
+- [x] Dashboard en-tête responsive : flex-col mobile, bouton export pleine largeur
+- [x] DocumentLineEditor : colonnes Unité/Catégorie cachées sur mobile, sous-totaux pleine largeur
 
 ### 3.5 Sécurité
 - [ ] RLS, uploads, presigned URLs, single account
@@ -243,3 +248,4 @@ Dernière mise à jour : 2026-02-09
 | 2026-02-09 | Phase 3.2 — Tests d'intégration : immutabilité (19), URSSAF (10), numérotation (8) — 149 tests au total |
 | 2026-02-09 | Phase 3.3 — Tests contenu PDF : documents (12), cession (7) — 168 tests au total |
 | 2026-02-09 | Phase 3.7 — CI/CD : workflow GitHub Actions (type-check + tests) |
+| 2026-02-09 | Phase 3.4 — Responsive & UX : sidebar mobile drawer, hamburger, empty states, toasts, DocumentLineEditor |
