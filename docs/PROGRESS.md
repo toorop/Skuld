@@ -11,7 +11,7 @@ Dernière mise à jour : 2026-02-09
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 100%       | Terminé      |
-| 3     | Intégration, E2E & Polish    | 70%        | En cours     |
+| 3     | Intégration, E2E & Polish    | 85%        | En cours     |
 | 4     | Post-MVP                     | —          | Futur        |
 
 ---
@@ -215,8 +215,17 @@ Dernière mise à jour : 2026-02-09
 - [x] Dashboard en-tête responsive : flex-col mobile, bouton export pleine largeur
 - [x] DocumentLineEditor : colonnes Unité/Catégorie cachées sur mobile, sous-totaux pleine largeur
 
-### 3.5 Sécurité
-- [ ] RLS, uploads, presigned URLs, single account
+### 3.5 Sécurité (17 tests)
+- [x] Auth obligatoire sur toutes les routes — 7 tests (`security.test.ts`)
+  - GET settings/contacts/documents/transactions/dashboard + POST proofs/upload + POST setup → 401 sans JWT
+- [x] Validation upload preuves — 4 tests (`security.test.ts`)
+  - Sans fichier → 422, MIME interdit → 422, trop gros (> 5 Mo) → 422, fichier valide → 201
+- [x] Validation upload logo — 4 tests (`security.test.ts`)
+  - Sans fichier → 422, MIME interdit → 422, trop gros (> 2 Mo) → 422, fichier valide → 200
+- [x] Setup unique — 2 tests (`security.test.ts`)
+  - Settings existe déjà → 409, premier setup → 201
+- N/A Presigned URLs : R2 accédé directement via le Worker (pas de presigned URLs)
+- N/A RLS : en place (migration `00008_rls.sql`), non testable avec mocks Supabase — couvert par les tests auth
 
 ### 3.6 Documentation
 - [ ] README final, captures d'écran, CONTRIBUTING, CHANGELOG
@@ -249,3 +258,4 @@ Dernière mise à jour : 2026-02-09
 | 2026-02-09 | Phase 3.3 — Tests contenu PDF : documents (12), cession (7) — 168 tests au total |
 | 2026-02-09 | Phase 3.7 — CI/CD : workflow GitHub Actions (type-check + tests) |
 | 2026-02-09 | Phase 3.4 — Responsive & UX : sidebar mobile drawer, hamburger, empty states, toasts, DocumentLineEditor |
+| 2026-02-09 | Phase 3.5 — Tests sécurité : auth (7), uploads preuves (4), uploads logo (4), setup unique (2) — 185 tests au total |
