@@ -2,7 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDocumentsStore } from '@/stores/documents'
-import { PlusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, DocumentTextIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const store = useDocumentsStore()
@@ -136,9 +136,17 @@ function formatDate(iso: string): string {
     <!-- État vide -->
     <div
       v-else-if="store.documents.length === 0"
-      class="mt-12 text-center text-sm text-gray-500"
+      class="mt-12 flex flex-col items-center text-center"
     >
-      Aucun document pour le moment.
+      <DocumentTextIcon class="h-12 w-12 text-gray-300" />
+      <p class="mt-2 text-sm text-gray-500">Aucun document pour le moment.</p>
+      <router-link
+        :to="{ path: '/app/documents/new', query: typeFilter ? { type: typeFilter } : {} }"
+        class="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
+      >
+        <PlusIcon class="h-4 w-4" />
+        Créer un document
+      </router-link>
     </div>
 
     <!-- Tableau -->

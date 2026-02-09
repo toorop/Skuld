@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { ChartBarIcon } from '@heroicons/vue/24/outline'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useSettingsStore } from '@/stores/settings'
 import { URSSAF_THRESHOLDS, FiscalCategory, DeclarationFrequency } from '@skuld/shared'
@@ -143,10 +144,10 @@ onMounted(async () => {
 <template>
   <div class="space-y-6">
     <!-- En-tête -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <h1 class="text-2xl font-bold text-gray-900">Tableau de bord URSSAF</h1>
       <button
-        class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        class="inline-flex w-full items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
         @click="handleExport"
       >
         Exporter en CSV
@@ -274,8 +275,9 @@ onMounted(async () => {
     </template>
 
     <!-- Pas de données -->
-    <div v-else class="py-12 text-center text-sm text-gray-500">
-      Aucune donnée pour cette période.
+    <div v-else class="flex flex-col items-center py-12 text-center">
+      <ChartBarIcon class="h-12 w-12 text-gray-300" />
+      <p class="mt-2 text-sm text-gray-500">Aucune donnée pour cette période.</p>
     </div>
   </div>
 </template>

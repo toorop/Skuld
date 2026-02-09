@@ -18,7 +18,7 @@ const colors = {
 </script>
 
 <template>
-  <div class="pointer-events-none fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+  <div class="pointer-events-none fixed inset-x-4 bottom-4 z-50 flex flex-col gap-2 sm:inset-x-auto sm:right-4 sm:left-auto">
     <TransitionGroup
       enter-active-class="transform transition duration-300 ease-out"
       enter-from-class="translate-y-2 opacity-0"
@@ -30,7 +30,7 @@ const colors = {
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        :class="[colors[toast.type], 'pointer-events-auto flex items-center gap-3 rounded-lg border px-4 py-3 shadow-lg']"
+        :class="[colors[toast.type], 'pointer-events-auto flex w-full items-center gap-3 rounded-lg border px-4 py-3 shadow-lg sm:w-auto']"
       >
         <component :is="icons[toast.type]" class="h-5 w-5 shrink-0" />
         <span class="text-sm font-medium">{{ toast.message }}</span>

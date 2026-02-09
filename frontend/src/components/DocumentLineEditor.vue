@@ -89,13 +89,13 @@ function formatCurrency(amount: number): string {
             <th class="px-3 py-2 text-right text-xs font-medium uppercase text-gray-500 w-20">
               Quantité
             </th>
-            <th class="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500 w-20">
+            <th class="hidden px-3 py-2 text-left text-xs font-medium uppercase text-gray-500 w-20 sm:table-cell">
               Unité
             </th>
             <th class="px-3 py-2 text-right text-xs font-medium uppercase text-gray-500 w-28">
               Prix unitaire
             </th>
-            <th class="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500 w-32">
+            <th class="hidden px-3 py-2 text-left text-xs font-medium uppercase text-gray-500 w-32 sm:table-cell">
               Catégorie fiscale
             </th>
             <th class="px-3 py-2 text-right text-xs font-medium uppercase text-gray-500 w-24">
@@ -131,7 +131,7 @@ function formatCurrency(amount: number): string {
               />
             </td>
             <!-- Unité -->
-            <td class="px-2 py-2">
+            <td class="hidden px-2 py-2 sm:table-cell">
               <input
                 :value="line.unit"
                 type="text"
@@ -155,7 +155,7 @@ function formatCurrency(amount: number): string {
               />
             </td>
             <!-- Catégorie fiscale -->
-            <td class="px-2 py-2">
+            <td class="hidden px-2 py-2 sm:table-cell">
               <select
                 :value="line.fiscalCategory"
                 :disabled="disabled"
@@ -200,7 +200,7 @@ function formatCurrency(amount: number): string {
 
     <!-- Sous-totaux -->
     <div class="mt-4 flex justify-end">
-      <dl class="w-64 space-y-1 text-sm">
+      <dl class="w-full space-y-1 text-sm sm:w-64">
         <div
           v-if="subtotals.bicVente > 0"
           class="flex justify-between text-gray-600"

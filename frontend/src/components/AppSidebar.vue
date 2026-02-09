@@ -8,6 +8,10 @@ import {
   Cog6ToothIcon,
 } from '@heroicons/vue/24/outline'
 
+const props = defineProps<{
+  onNavigate?: () => void
+}>()
+
 const route = useRoute()
 
 const navigation = [
@@ -21,10 +25,14 @@ const navigation = [
 function isActive(path: string): boolean {
   return route.path.startsWith(path)
 }
+
+function handleClick() {
+  props.onNavigate?.()
+}
 </script>
 
 <template>
-  <aside class="flex w-64 flex-col border-r border-gray-200 bg-white">
+  <aside class="flex h-full w-64 flex-col border-r border-gray-200 bg-white">
     <!-- Logo -->
     <div class="flex h-16 items-center gap-2 border-b border-gray-200 px-6">
       <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-sm font-bold text-white">
@@ -45,6 +53,7 @@ function isActive(path: string): boolean {
             : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
           'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
         ]"
+        @click="handleClick"
       >
         <component
           :is="item.icon"

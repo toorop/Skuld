@@ -5,7 +5,7 @@ import { useContactsStore } from '@/stores/contacts'
 import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
-import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { MagnifyingGlassIcon, PlusIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const store = useContactsStore()
@@ -141,9 +141,17 @@ function typeBadgeClass(type: string) {
     <!-- État vide -->
     <div
       v-else-if="store.contacts.length === 0"
-      class="mt-12 text-center text-sm text-gray-500"
+      class="mt-12 flex flex-col items-center text-center"
     >
-      Aucun contact pour le moment.
+      <UserGroupIcon class="h-12 w-12 text-gray-300" />
+      <p class="mt-2 text-sm text-gray-500">Aucun contact pour le moment.</p>
+      <router-link
+        to="/app/contacts/new"
+        class="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
+      >
+        <PlusIcon class="h-4 w-4" />
+        Créer un contact
+      </router-link>
     </div>
 
     <!-- Tableau -->
