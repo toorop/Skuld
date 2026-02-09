@@ -219,14 +219,14 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [x] E2E : export CSV (`e2e/export.spec.ts`)
 - [x] E2E : paramètres (`e2e/settings.spec.ts`)
 
-### 3.2 Intégration frontend ↔ backend
-- [ ] Vérifier l'immutabilité des documents envoyés
-- [ ] Vérifier les calculs URSSAF sur des données réalistes
-- [ ] Vérifier la numérotation séquentielle (pas de trous)
+### 3.2 Intégration frontend ↔ backend ✅
+- [x] Vérifier l'immutabilité des documents envoyés (19 tests)
+- [x] Vérifier les calculs URSSAF sur des données réalistes (10 tests)
+- [x] Vérifier la numérotation séquentielle — pas de trous (8 tests)
 
-### 3.3 PDF
-- [ ] Vérifier les factures PDF générées (mentions légales, mise en page)
-- [ ] Vérifier le certificat de cession PDF
+### 3.3 PDF ✅
+- [x] Vérifier les factures PDF générées — mentions légales, mise en page (12 tests)
+- [x] Vérifier le certificat de cession PDF (7 tests)
 - [ ] Tester l'impression navigateur
 
 ### 3.4 Responsive & UX
@@ -248,7 +248,7 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] CHANGELOG.md
 
 ### 3.7 CI/CD
-- [ ] GitHub Actions : lint + type-check + tests unitaires sur chaque push
+- [x] GitHub Actions : lint + type-check + tests unitaires sur chaque push/PR (`ci.yml`)
 - [ ] GitHub Actions : tests E2E sur les PR
 
 ---

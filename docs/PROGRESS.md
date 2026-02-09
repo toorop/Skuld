@@ -11,7 +11,7 @@ Dernière mise à jour : 2026-02-09
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 100%       | Terminé      |
-| 3     | Intégration, E2E & Polish    | 30%        | En cours     |
+| 3     | Intégration, E2E & Polish    | 50%        | En cours     |
 | 4     | Post-MVP                     | —          | Futur        |
 
 ---
@@ -74,8 +74,8 @@ Dernière mise à jour : 2026-02-09
 - [x] CRUD + send/pay/cancel/convert/pdf (9 routes) (`routes/documents.ts`)
 
 ### 1.6 Génération PDF
-- [x] Template PDF document commercial (facture/devis/avoir) — 8 tests
-- [x] Template PDF certificat de cession — 6 tests
+- [x] Template PDF document commercial (facture/devis/avoir) — 8 tests + 12 tests contenu
+- [x] Template PDF certificat de cession — 6 tests + 7 tests contenu
 - [x] Helpers PDF (formatage, dessin) — 27 tests
 - [x] Stockage R2 + intégration routes (/send + /cession-pdf)
 
@@ -191,17 +191,33 @@ Dernière mise à jour : 2026-02-09
   - Avoir créé en DRAFT sans référence
   - Référence dans le Content-Disposition du PDF
 
-### 3.3 Responsive & UX
+### 3.3 Tests contenu PDF (19 tests)
+- [x] Documents commerciaux — 12 tests (`document-pdf.test.ts`)
+  - Mention TVA (`art. 293 B du CGI`) présente sur tous les documents
+  - Pénalités de retard (`article L.441-10`) uniquement sur les factures
+  - IBAN/BIC affichés quand renseignés
+  - Devis et avoir sans pénalités de retard
+  - Référence document, label type (FACTURE/DEVIS/AVOIR)
+  - Nom entreprise + SIRET, nom destinataire
+  - Total HT formaté, sous-totaux par catégorie (activité mixte)
+  - Mode de paiement
+- [x] Certificat de cession — 7 tests (`cession-pdf.test.ts`)
+  - Titre « CERTIFICAT DE CESSION »
+  - Nom du vendeur (contact), nom acheteur (entreprise) + SIRET
+  - Description du bien, montant formaté, date formatée
+  - Mention légale « Article 321-1 du Code penal »
+
+### 3.4 Responsive & UX
 - [ ] Mobile, états vides, messages FR, feedback
 
-### 3.4 Sécurité
+### 3.5 Sécurité
 - [ ] RLS, uploads, presigned URLs, single account
 
-### 3.5 Documentation
+### 3.6 Documentation
 - [ ] README final, captures d'écran, CONTRIBUTING, CHANGELOG
 
-### 3.6 CI/CD
-- [ ] GitHub Actions : lint + tests unitaires + E2E
+### 3.7 CI/CD
+- [x] GitHub Actions : lint + tests unitaires sur push/PR (`ci.yml`)
 
 ---
 
@@ -225,3 +241,5 @@ Dernière mise à jour : 2026-02-09
 | 2026-02-08 | Phase 2.8 — Paramètres : profil entreprise, logo, personnalisation docs, URSSAF, export, suppression compte |
 | 2026-02-08 | Phase 3.1 — Tests E2E Playwright : 6 specs (setup, invoicing, second-hand, dashboard, export, settings), fixtures + helpers, 6/6 passing |
 | 2026-02-09 | Phase 3.2 — Tests d'intégration : immutabilité (19), URSSAF (10), numérotation (8) — 149 tests au total |
+| 2026-02-09 | Phase 3.3 — Tests contenu PDF : documents (12), cession (7) — 168 tests au total |
+| 2026-02-09 | Phase 3.7 — CI/CD : workflow GitHub Actions (type-check + tests) |
