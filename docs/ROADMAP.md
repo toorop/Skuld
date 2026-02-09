@@ -242,10 +242,10 @@ Plan de développement détaillé, découpé en phases séquentielles. Chaque ph
 - [ ] Vérifier qu'un seul compte peut exister par instance
 
 ### 3.6 Documentation
-- [ ] README finalisé avec guide de déploiement pas-à-pas
+- [x] README finalisé avec guide de déploiement pas-à-pas
 - [ ] Captures d'écran dans le README
-- [ ] CONTRIBUTING.md (guide de contribution)
-- [ ] CHANGELOG.md
+- [x] CONTRIBUTING.md (guide de contribution)
+- [x] CHANGELOG.md
 
 ### 3.7 CI/CD
 - [x] GitHub Actions : lint + type-check + tests unitaires sur chaque push/PR (`ci.yml`)

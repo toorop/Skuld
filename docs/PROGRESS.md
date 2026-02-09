@@ -11,7 +11,7 @@ Dernière mise à jour : 2026-02-09
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 100%       | Terminé      |
-| 3     | Intégration, E2E & Polish    | 85%        | En cours     |
+| 3     | Intégration, E2E & Polish    | 95%        | En cours     |
 | 4     | Post-MVP                     | —          | Futur        |
 
 ---
@@ -228,7 +228,10 @@ Dernière mise à jour : 2026-02-09
 - N/A RLS : en place (migration `00008_rls.sql`), non testable avec mocks Supabase — couvert par les tests auth
 
 ### 3.6 Documentation
-- [ ] README final, captures d'écran, CONTRIBUTING, CHANGELOG
+- [x] README finalisé : badges CI + licence, sections sécurité, conformité fiscale, tests, guide déploiement détaillé
+- [x] CONTRIBUTING.md : prérequis, conventions code/commits, workflow PR, points d'attention
+- [x] CHANGELOG.md : version 0.1.0 complète (format Keep a Changelog)
+- [ ] Captures d'écran (à ajouter manuellement)
 
 ### 3.7 CI/CD
 - [x] GitHub Actions : lint + tests unitaires sur push/PR (`ci.yml`)
@@ -259,3 +262,4 @@ Dernière mise à jour : 2026-02-09
 | 2026-02-09 | Phase 3.7 — CI/CD : workflow GitHub Actions (type-check + tests) |
 | 2026-02-09 | Phase 3.4 — Responsive & UX : sidebar mobile drawer, hamburger, empty states, toasts, DocumentLineEditor |
 | 2026-02-09 | Phase 3.5 — Tests sécurité : auth (7), uploads preuves (4), uploads logo (4), setup unique (2) — 185 tests au total |
+| 2026-02-09 | Phase 3.6 — Documentation : README finalisé (badges, sécurité, conformité, tests), CONTRIBUTING.md, CHANGELOG.md v0.1.0 |

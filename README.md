@@ -1,15 +1,38 @@
 # Skuld — Gestion Auto-Entrepreneur
 
-Skuld est une application web open-source de gestion pour les **auto-entrepreneurs (micro-entreprises) français**. Elle couvre la facturation, le suivi de trésorerie, la conformité fiscale URSSAF et la traçabilité des achats d'occasion.
+[![CI](https://github.com/toorop/Skuld/actions/workflows/ci.yml/badge.svg)](https://github.com/toorop/Skuld/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Skuld est une application web **open-source** de gestion pour les **auto-entrepreneurs (micro-entreprises) français**. Self-hosted, single-tenant : une instance = un utilisateur, vos données restent chez vous.
+
+<!-- TODO: ajouter des captures d'écran ici
+![Dashboard](docs/screenshots/dashboard.png)
+![Facture PDF](docs/screenshots/facture-pdf.png)
+-->
 
 ## Fonctionnalités
 
-- **Facturation** — Devis, factures et avoirs avec numérotation séquentielle conforme. Génération PDF avec toutes les mentions légales obligatoires.
+- **Facturation** — Devis, factures et avoirs avec numérotation séquentielle conforme. Génération PDF avec toutes les mentions légales obligatoires (TVA, pénalités de retard, IBAN).
 - **Ventilation fiscale** — Chaque ligne de document est catégorisée (BIC Vente, BIC Presta, BNC) pour faciliter les déclarations URSSAF.
 - **Trésorerie** — Suivi des recettes et dépenses, rapprochement avec les factures.
-- **Achats d'occasion** — Système de "faisceau de preuves" pour les achats auprès de particuliers (capture d'annonce, preuve de paiement, certificat de cession).
-- **Dashboard URSSAF** — Totaux par catégorie fiscale (mensuel ou trimestriel), alertes de dépassement de seuils, export CSV.
+- **Achats d'occasion** — Système de "faisceau de preuves" pour les achats auprès de particuliers (capture d'annonce, preuve de paiement, certificat de cession PDF généré automatiquement).
+- **Dashboard URSSAF** — Totaux par catégorie fiscale (mensuel ou trimestriel), barres de progression, alertes de dépassement de seuils, export CSV.
 - **Gestion des contacts** — Clients et fournisseurs, particuliers et professionnels.
+- **Paramètres** — Profil entreprise, upload logo, personnalisation documents, fréquence de déclaration, export complet des données (JSON), suppression de compte.
+
+## Stack technique
+
+| Composant | Technologie |
+| --------- | ----------- |
+| Frontend  | Vue 3 (Composition API), Vite, TypeScript, Tailwind CSS, Pinia, Headless UI |
+| Backend   | Cloudflare Workers, Hono, TypeScript |
+| Base de données | Supabase (PostgreSQL) avec RLS |
+| Authentification | Supabase Auth (email + magic link) |
+| Stockage fichiers | Cloudflare R2 |
+| Validation | Zod (schémas partagés front/back) |
+| PDF | pdf-lib |
+| Tests | Vitest (185 tests unitaires et d'intégration), Playwright (E2E) |
+| CI | GitHub Actions |
 
 ## Prérequis
 
@@ -20,7 +43,7 @@ Skuld est une application **self-hosted** : vous déployez votre propre instance
 Le [plan gratuit Cloudflare](https://www.cloudflare.com/plans/) suffit largement pour un usage individuel :
 
 - **Cloudflare Pages** — Héberge l'interface web (frontend). Builds et déploiements illimités.
-- **Cloudflare Workers** — Exécute l'API (backend). 100 000 requêtes/jour en gratuit, ce qui est plus que suffisant.
+- **Cloudflare Workers** — Exécute l'API (backend). 100 000 requêtes/jour en gratuit.
 - **Cloudflare R2** — Stocke les fichiers (factures PDF, preuves d'achat). 10 Go de stockage gratuit.
 
 Pour créer un compte : [dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up)
@@ -30,7 +53,7 @@ Pour créer un compte : [dash.cloudflare.com/sign-up](https://dash.cloudflare.co
 Le [plan gratuit Supabase](https://supabase.com/pricing) fournit tout ce dont Skuld a besoin :
 
 - **Base de données PostgreSQL** — 500 Mo de stockage (largement suffisant pour des années de facturation).
-- **Authentification** — Gestion du login sécurisée, jusqu'à 50 000 utilisateurs actifs (Skuld n'en utilise qu'un seul).
+- **Authentification** — Gestion du login sécurisée (email + magic link).
 
 Pour créer un compte : [supabase.com/dashboard](https://supabase.com/dashboard)
 
@@ -53,88 +76,68 @@ npm install
 
 1. Allez sur [supabase.com/dashboard](https://supabase.com/dashboard) et créez un nouveau projet.
 2. Notez l'**URL du projet** et la **clé anon** (dans Paramètres > API).
-3. Lancez les migrations SQL pour créer les tables :
+3. Notez également la **clé service role** (même page, section "service_role key" — ne jamais l'exposer côté client).
+4. Lancez les migrations SQL pour créer les tables :
 
 ```bash
-# Avec la CLI Supabase (recommandé)
+# Installer la CLI Supabase si nécessaire
+npm install -g supabase
+
+# Lier votre projet
 npx supabase link --project-ref VOTRE_REF_PROJET
+
+# Appliquer les migrations
 npx supabase db push
 ```
 
 ### 3. Créer un bucket R2 sur Cloudflare
 
-1. Dans le [dashboard Cloudflare](https://dash.cloudflare.com/), allez dans R2 > Créer un bucket.
+1. Dans le [dashboard Cloudflare](https://dash.cloudflare.com/), allez dans **R2 > Créer un bucket**.
 2. Nommez-le `skuld-proofs`.
-3. Créez une clé API R2 (R2 > Gérer les clés API).
 
-### 4. Configurer les variables d'environnement
+### 4. Configurer le backend
 
 ```bash
-cp .env.example .env
+# Copier et remplir la configuration Wrangler
+cp backend/wrangler.toml.example backend/wrangler.toml
+
+# Définir les secrets (recommandé plutôt que de les mettre dans wrangler.toml)
+cd backend
+npx wrangler secret put SUPABASE_URL
+npx wrangler secret put SUPABASE_ANON_KEY
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+npx wrangler secret put APP_URL
+cd ..
 ```
 
-Remplissez le fichier `.env` avec vos clés Supabase et Cloudflare R2 :
+### 5. Configurer le frontend
+
+Créez un fichier `frontend/.env.production` :
 
 ```env
-# Supabase
-SUPABASE_URL=https://votre-projet.supabase.co
-SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-
-# Cloudflare R2
-R2_BUCKET_NAME=skuld-proofs
-R2_ACCESS_KEY_ID=votre_clé
-R2_SECRET_ACCESS_KEY=votre_secret
-
-# Application
-APP_URL=https://votre-skuld.pages.dev
+VITE_SUPABASE_URL=https://votre-projet.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...
+VITE_API_URL=https://skuld-api.votre-compte.workers.dev
 ```
 
-### 5. Déployer
+### 6. Déployer
 
 ```bash
 # Déployer le backend (Cloudflare Workers)
 npm run deploy:backend
 
-# Déployer le frontend (Cloudflare Pages)
-npm run deploy:frontend
+# Construire et déployer le frontend (Cloudflare Pages)
+npm run build:frontend
+# Puis déployer le dossier frontend/dist via le dashboard Cloudflare Pages
+# ou avec : npx wrangler pages deploy frontend/dist --project-name=skuld
 ```
 
-### 6. Première utilisation
+### 7. Première utilisation
 
 1. Ouvrez l'URL de votre application.
 2. Créez votre compte (un seul compte par instance).
-3. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, etc.).
+3. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
 4. C'est prêt !
-
-## Stack technique
-
-| Composant | Technologie |
-| --------- | ----------- |
-| Frontend  | Vue 3, Vite, TypeScript, Tailwind CSS, Pinia |
-| Backend   | Cloudflare Workers, Hono, TypeScript |
-| Base de données | Supabase (PostgreSQL) |
-| Authentification | Supabase Auth |
-| Stockage fichiers | Cloudflare R2 |
-| Validation | Zod (partagée front/back) |
-| PDF | pdf-lib |
-
-## Structure du projet
-
-```
-skuld/
-├── frontend/              # Application Vue 3
-├── backend/               # API Hono (Cloudflare Worker)
-├── packages/
-│   └── shared/            # Types et schémas Zod partagés
-├── supabase/
-│   └── migrations/        # Migrations SQL
-├── docs/
-│   ├── SPECIFICATION.md   # Spécification complète
-│   ├── ROADMAP.md         # Plan de développement
-│   └── PROGRESS.md        # Suivi d'avancement
-└── README.md
-```
 
 ## Développement local
 
@@ -142,13 +145,93 @@ skuld/
 # Installer les dépendances
 npm install
 
-# Lancer le frontend en développement
+# Copier les variables d'environnement du backend
+cp backend/.dev.vars.example backend/.dev.vars
+# Remplir avec vos clés Supabase
+
+# Lancer le backend en développement
+npm run dev:backend
+
+# Lancer le frontend en développement (dans un autre terminal)
 npm run dev:frontend
 
-# Lancer le backend en développement (Wrangler)
-npm run dev:backend
+# Lancer les tests
+npm test
+
+# Type-check + tests
+npm run check
 ```
+
+## Structure du projet
+
+```
+skuld/
+├── frontend/              # Application Vue 3 (SPA)
+│   └── src/
+│       ├── components/    # Composants réutilisables
+│       ├── views/         # Pages
+│       ├── stores/        # Stores Pinia
+│       ├── lib/           # Client API, Supabase
+│       └── router/        # Routes Vue Router
+├── backend/               # API Hono (Cloudflare Worker)
+│   └── src/
+│       ├── routes/        # Routes API (+ __tests__/)
+│       ├── middleware/     # Auth, CORS, erreurs
+│       └── lib/           # Supabase, PDF, validation
+├── packages/
+│   └── shared/            # Types, constantes, schémas Zod
+├── supabase/
+│   └── migrations/        # 10 migrations SQL
+├── e2e/                   # Tests E2E Playwright
+├── docs/
+│   ├── SPECIFICATION.md   # Spécification fonctionnelle et technique
+│   ├── ROADMAP.md         # Plan de développement
+│   └── PROGRESS.md        # Suivi d'avancement
+├── CONTRIBUTING.md        # Guide de contribution
+├── CHANGELOG.md           # Journal des versions
+└── README.md
+```
+
+## Tests
+
+Le projet dispose d'une couverture de tests complète :
+
+- **185 tests unitaires et d'intégration** (Vitest)
+  - 52 tests validation des schémas Zod (packages/shared)
+  - 19 tests middleware auth + pagination + gestion d'erreurs
+  - 47 tests génération PDF (documents commerciaux, certificats de cession, helpers)
+  - 37 tests d'intégration (immutabilité documents, calculs URSSAF, numérotation séquentielle)
+  - 17 tests sécurité (auth obligatoire, validation uploads, setup unique)
+  - 13 tests contenu PDF (mentions légales, données extraites)
+- **6 specs E2E** (Playwright) — inscription, facturation, achats d'occasion, dashboard, export, paramètres
+
+```bash
+# Tests unitaires + intégration
+npm test
+
+# Tests E2E (nécessite un environnement Supabase de test)
+npx playwright test
+```
+
+## Sécurité
+
+- **Authentification JWT** sur toutes les routes API (middleware Hono)
+- **Row Level Security (RLS)** PostgreSQL — chaque table protégée par une policy `is_owner()`
+- **Validation des uploads** — types MIME autorisés (JPEG, PNG, WebP, PDF) et taille maximale (5 Mo preuves, 2 Mo logo)
+- **Setup unique** — un seul compte par instance (409 Conflict si déjà configuré)
+- **Pas de secrets côté client** — la clé service role Supabase n'est utilisée que dans le Worker
+
+## Conformité fiscale
+
+Skuld respecte les obligations des auto-entrepreneurs français :
+
+- **Mention TVA obligatoire** — "TVA non applicable, art. 293 B du CGI" sur chaque document
+- **Pénalités de retard** — mention légale obligatoire sur les factures (art. L.441-10 du Code de commerce)
+- **Numérotation séquentielle** — conforme, non modifiable une fois le document envoyé
+- **Immutabilité** — un document envoyé ou payé ne peut plus être modifié (verrouillage en base)
+- **Ventilation BIC/BNC** — distinction BIC Vente / BIC Presta / BNC sur chaque ligne
+- **Seuils URSSAF** — alertes à 80% et 100% des plafonds (188 700 EUR BIC Vente, 77 700 EUR BIC Presta/BNC)
 
 ## Licence
 
-[MIT](LICENSE)
+[MIT](LICENSE) — Stéphane Depierrepont
