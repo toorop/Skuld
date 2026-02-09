@@ -69,7 +69,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=3', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.bicVente).toBe(8000)
       expect(body.data.bicPresta).toBe(2000)
       expect(body.data.bnc).toBe(0)
@@ -86,7 +86,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=5&quarterly=true', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       // Mois 5 → T2 (avr-jun)
       expect(body.data.period).toBe('T2 2025')
       expect(body.data.startDate).toBe('2025-04-01')
@@ -109,7 +109,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=6', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.bicVente).toBe(12000)
       expect(body.data.bicPresta).toBe(5000)
       expect(body.data.bnc).toBe(3000)
@@ -132,7 +132,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=1', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.alerts).toHaveLength(1)
       expect(body.data.alerts[0].category).toBe('BIC_PRESTA')
       expect(body.data.alerts[0].exceeded).toBe(false)
@@ -153,7 +153,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=1', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.alerts).toHaveLength(1)
       expect(body.data.alerts[0].category).toBe('BIC_VENTE')
       expect(body.data.alerts[0].exceeded).toBe(true)
@@ -174,7 +174,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=1', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.alerts).toHaveLength(0)
     })
 
@@ -187,7 +187,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=1', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.bicVente).toBe(0)
       expect(body.data.bicPresta).toBe(0)
       expect(body.data.bnc).toBe(0)
@@ -208,7 +208,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf?year=2025&month=1', {}, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       // La transaction sans catégorie est ignorée
       expect(body.data.bicVente).toBe(1000)
       expect(body.data.yearlyBicVente).toBe(1000)
@@ -272,7 +272,7 @@ describe('Dashboard — URSSAF', () => {
       const res = await app.request('/api/dashboard/urssaf/export', {}, testEnv)
 
       expect(res.status).toBe(422)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.code).toBe('VALIDATION_ERROR')
     })
   })

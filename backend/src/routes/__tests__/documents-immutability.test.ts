@@ -96,7 +96,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.code).toBe('CONFLICT')
     })
 
@@ -111,7 +111,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('brouillon')
     })
 
@@ -132,7 +132,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.notes).toBe('modifié')
     })
 
@@ -162,7 +162,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('brouillon')
     })
 
@@ -199,7 +199,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.status).toBe('SENT')
     })
 
@@ -227,7 +227,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('envoyé')
     })
 
@@ -265,7 +265,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.document.status).toBe('PAID')
       expect(body.data.transaction.direction).toBe('INCOME')
       expect(body.data.transaction.amount).toBe(1000)
@@ -295,7 +295,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('déjà annulé')
     })
 
@@ -308,7 +308,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.message).toContain('supprimé')
     })
 
@@ -330,7 +330,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.creditNote.doc_type).toBe('CREDIT_NOTE')
       expect(body.data.creditNote.status).toBe('DRAFT')
     })
@@ -352,7 +352,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.creditNote.doc_type).toBe('CREDIT_NOTE')
     })
   })
@@ -370,7 +370,7 @@ describe('Documents — Immutabilité', () => {
       }, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('devis')
     })
   })
@@ -388,7 +388,7 @@ describe('Documents — Immutabilité', () => {
       const res = await app.request('/api/documents/doc-1/pdf', {}, testEnv)
 
       expect(res.status).toBe(409)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('PDF')
     })
 

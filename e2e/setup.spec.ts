@@ -14,9 +14,6 @@ import {
   setupUnauthenticated,
   mockApiRoutes,
   apiResponse,
-  SUPABASE_URL,
-  STORAGE_KEY,
-  fakeSession,
 } from './fixtures/helpers'
 import { makeDbSettings } from './fixtures/test-data'
 

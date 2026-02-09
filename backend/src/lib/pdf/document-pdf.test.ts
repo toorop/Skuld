@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { PDFDocument, decodePDFRawStream, PDFArray } from 'pdf-lib'
-import { LATE_PENALTY_TEXT } from '@skuld/shared'
 import { generateDocumentPdf } from './document-pdf'
 import type { GenerateDocumentPdfParams } from './document-pdf'
 

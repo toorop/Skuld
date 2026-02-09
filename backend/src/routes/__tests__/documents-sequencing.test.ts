@@ -96,7 +96,7 @@ describe('Documents — Numérotation séquentielle', () => {
       const res = await app.request('/api/documents/doc-1/send', { method: 'POST' }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.reference).toBe('FAC-2025-0001')
 
       // Vérifier l'appel à rpc
@@ -117,7 +117,7 @@ describe('Documents — Numérotation séquentielle', () => {
       const res = await app.request('/api/documents/doc-2/send', { method: 'POST' }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.reference).toBe('FAC-2025-0002')
     })
 
@@ -135,7 +135,7 @@ describe('Documents — Numérotation séquentielle', () => {
       const res = await app.request('/api/documents/doc-1/send', { method: 'POST' }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.reference).toBe('DEV-2025-0001')
       expect(mockSupabase.rpc).toHaveBeenCalledWith('next_sequence', { p_type: 'QUOTE' })
     })
@@ -172,7 +172,7 @@ describe('Documents — Numérotation séquentielle', () => {
       const res = await app.request('/api/documents/doc-1/send', { method: 'POST' }, testEnv)
 
       expect(res.status).toBe(500)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.error.message).toContain('numérotation')
     })
   })
@@ -207,7 +207,7 @@ describe('Documents — Numérotation séquentielle', () => {
       const res = await app.request('/api/documents/doc-1/convert', { method: 'POST' }, testEnv)
 
       expect(res.status).toBe(201)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.doc_type).toBe('INVOICE')
       expect(body.data.status).toBe('DRAFT')
       expect(body.data.reference).toBeNull()
@@ -239,7 +239,7 @@ describe('Documents — Numérotation séquentielle', () => {
       const res = await app.request('/api/documents/doc-1/cancel', { method: 'POST' }, testEnv)
 
       expect(res.status).toBe(200)
-      const body = await res.json()
+      const body = await res.json() as Record<string, any>
       expect(body.data.creditNote.doc_type).toBe('CREDIT_NOTE')
       expect(body.data.creditNote.status).toBe('DRAFT')
       expect(body.data.creditNote.reference).toBeNull()

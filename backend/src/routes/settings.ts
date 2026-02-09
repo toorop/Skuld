@@ -144,7 +144,7 @@ settings.delete('/account', async (c) => {
   // Supprimer les fichiers R2
   const listed = await bucket.list()
   if (listed.objects.length > 0) {
-    await Promise.all(listed.objects.map((obj) => bucket.delete(obj.key)))
+    await Promise.all(listed.objects.map((obj: { key: string }) => bucket.delete(obj.key)))
   }
 
   // Supprimer les données dans l'ordre (respect des FK)
