@@ -1,6 +1,6 @@
 # Suivi d'avancement — Skuld
 
-Dernière mise à jour : 2026-02-08
+Dernière mise à jour : 2026-02-09
 
 ---
 
@@ -11,7 +11,7 @@ Dernière mise à jour : 2026-02-08
 | 0     | Fondations (Monorepo)        | 100%       | Terminé      |
 | 1     | Backend (API Hono)           | 100%       | Terminé      |
 | 2     | Frontend (Vue 3)             | 100%       | Terminé      |
-| 3     | Intégration, E2E & Polish    | 15%        | En cours     |
+| 3     | Intégration, E2E & Polish    | 30%        | En cours     |
 | 4     | Post-MVP                     | —          | Futur        |
 
 ---
@@ -165,8 +165,31 @@ Dernière mise à jour : 2026-02-08
 - [x] E2E : export CSV (`e2e/export.spec.ts`)
 - [x] E2E : paramètres (`e2e/settings.spec.ts`)
 
-### 3.2 Intégration
-- [ ] Vérification immutabilité, calculs URSSAF, numérotation
+### 3.2 Tests d'intégration (37 tests)
+- [x] Immutabilité documents — 19 tests (`documents-immutability.test.ts`)
+  - PUT sur SENT/PAID → 409, PUT sur DRAFT → 200
+  - SEND sur SENT/PAID → 409, SEND sur DRAFT → 200
+  - PAY sur DRAFT/PAID → 409, PAY sur SENT → 200 (+ création transaction)
+  - CANCEL sur CANCELLED → 409, CANCEL sur DRAFT/SENT/PAID → 200 (+ avoir)
+  - CONVERT non-QUOTE → 409
+  - PDF sans référence → 409, PDF doc inexistant → 404
+- [x] Calculs URSSAF — 10 tests (`dashboard-urssaf.test.ts`)
+  - Agrégation mensuelle et trimestrielle
+  - Totaux mixtes BIC_VENTE + BIC_PRESTA + BNC
+  - Alertes seuil 80% et 100% (exceeded)
+  - Pas d'alerte sous 80%, totaux à 0 sans transactions
+  - Catégorie null ignorée dans l'agrégation
+  - Export CSV format correct (séparateur ;, montants virgule)
+  - Export CSV sans dates → 422
+- [x] Numérotation séquentielle — 8 tests (`documents-sequencing.test.ts`)
+  - Premier envoi → FAC-YYYY-0001 via rpc next_sequence
+  - Envois successifs → séquence incrémentée
+  - Types différents : INVOICE→FAC-, QUOTE→DEV-
+  - Référence stockée dans le document via update
+  - Erreur séquence → 500
+  - Conversion devis → facture DRAFT sans référence
+  - Avoir créé en DRAFT sans référence
+  - Référence dans le Content-Disposition du PDF
 
 ### 3.3 Responsive & UX
 - [ ] Mobile, états vides, messages FR, feedback
@@ -201,3 +224,4 @@ Dernière mise à jour : 2026-02-08
 | 2026-02-08 | Phase 2.7 — Dashboard URSSAF : store settings, store dashboard, vue complète, export CSV |
 | 2026-02-08 | Phase 2.8 — Paramètres : profil entreprise, logo, personnalisation docs, URSSAF, export, suppression compte |
 | 2026-02-08 | Phase 3.1 — Tests E2E Playwright : 6 specs (setup, invoicing, second-hand, dashboard, export, settings), fixtures + helpers, 6/6 passing |
+| 2026-02-09 | Phase 3.2 — Tests d'intégration : immutabilité (19), URSSAF (10), numérotation (8) — 149 tests au total |
