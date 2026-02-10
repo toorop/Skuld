@@ -1,31 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
 
-const router = useRouter()
 const auth = useAuthStore()
 const toast = useToast()
 
 const email = ref('')
-const password = ref('')
 const loading = ref(false)
-const magicLinkMode = ref(false)
 const magicLinkSent = ref(false)
 
 async function handleLogin() {
   loading.value = true
   try {
-    if (magicLinkMode.value) {
-      await auth.loginWithMagicLink(email.value)
-      magicLinkSent.value = true
-    } else {
-      await auth.login(email.value, password.value)
-      router.push(auth.setupComplete ? { name: 'dashboard' } : { name: 'setup' })
-    }
+    await auth.loginWithMagicLink(email.value)
+    magicLinkSent.value = true
   } catch {
-    toast.error('Identifiants incorrects. Veuillez réessayer.')
+    toast.error('Impossible d\'envoyer le lien de connexion. Veuillez réessayer.')
   } finally {
     loading.value = false
   }
@@ -63,35 +54,13 @@ async function handleLogin() {
           />
         </div>
 
-        <div v-if="!magicLinkMode">
-          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            autocomplete="current-password"
-            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-          />
-        </div>
-
         <button
           type="submit"
           :disabled="loading"
           class="flex w-full justify-center rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {{ loading ? 'Chargement...' : (magicLinkMode ? 'Recevoir un lien de connexion' : 'Se connecter') }}
+          {{ loading ? 'Envoi en cours...' : 'Recevoir un lien de connexion' }}
         </button>
-
-        <div class="text-center">
-          <button
-            type="button"
-            class="text-sm text-primary-600 hover:text-primary-500"
-            @click="magicLinkMode = !magicLinkMode"
-          >
-            {{ magicLinkMode ? 'Se connecter' : 'Recevoir un lien de connexion' }}
-          </button>
-        </div>
       </form>
     </div>
   </div>

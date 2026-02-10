@@ -43,22 +43,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /** Connexion par email/mot de passe */
-  async function login(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) throw error
-    await checkSetup()
-  }
-
   /** Connexion par magic link */
   async function loginWithMagicLink(email: string) {
     const { error } = await supabase.auth.signInWithOtp({ email })
-    if (error) throw error
-  }
-
-  /** Inscription (premier utilisateur de l'instance) */
-  async function signUp(email: string, password: string) {
-    const { error } = await supabase.auth.signUp({ email, password })
     if (error) throw error
   }
 
@@ -78,9 +65,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     init,
     checkSetup,
-    login,
     loginWithMagicLink,
-    signUp,
     logout,
   }
 })
