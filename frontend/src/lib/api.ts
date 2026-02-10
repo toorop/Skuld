@@ -5,7 +5,9 @@
 import { supabase } from './supabase'
 import type { ApiResponse, PaginatedResponse } from '@skuld/shared'
 
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : '/api'
 
 /** Erreur API avec code HTTP et détails */
 export class ApiError extends Error {
