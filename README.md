@@ -199,6 +199,16 @@ cd ..
 4. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
 5. C'est prêt !
 
+### 9. Sécuriser l'instance (important)
+
+Une fois votre compte créé, **désactivez les inscriptions** dans Supabase pour empêcher quiconque de créer un second compte sur votre instance :
+
+1. Allez dans le [dashboard Supabase](https://supabase.com/dashboard) > votre projet > **Authentication** > **Settings** (dans la section Providers > Email).
+2. Décochez **« Allow new users to sign up »**.
+3. Cliquez **Save**.
+
+L'API vérifie également côté serveur que l'email saisi au login correspond bien au propriétaire de l'instance, mais ce réglage Supabase est une protection indispensable.
+
 ## Mise à jour
 
 Pour mettre à jour votre instance après une nouvelle version :
@@ -265,7 +275,7 @@ skuld/
 ├── packages/
 │   └── shared/            # Types, constantes, schémas Zod
 ├── supabase/
-│   └── migrations/        # 10 migrations SQL
+│   └── migrations/        # 11 migrations SQL
 ├── e2e/                   # Tests E2E Playwright
 ├── docs/
 │   ├── SPECIFICATION.md   # Spécification fonctionnelle et technique
@@ -303,6 +313,7 @@ npx playwright test
 - **Row Level Security (RLS)** PostgreSQL — chaque table protégée par une policy `is_owner()`
 - **Validation des uploads** — types MIME autorisés (JPEG, PNG, WebP, PDF) et taille maximale (5 Mo preuves, 2 Mo logo)
 - **Setup unique** — un seul compte par instance (409 Conflict si déjà configuré)
+- **Vérification email au login** — seul l'email du propriétaire peut recevoir un magic link (vérification côté serveur)
 - **Pas de secrets côté client** — la clé service role Supabase n'est utilisée que dans le Worker
 
 ## Conformité fiscale

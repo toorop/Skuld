@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { ApiError } from '@/lib/api'
 
 const auth = useAuthStore()
 const toast = useToast()
@@ -15,8 +16,12 @@ async function handleLogin() {
   try {
     await auth.loginWithMagicLink(email.value)
     magicLinkSent.value = true
-  } catch {
-    toast.error('Impossible d\'envoyer le lien de connexion. Veuillez réessayer.')
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 403) {
+      toast.error('Adresse email non autorisée.')
+    } else {
+      toast.error('Impossible d\'envoyer le lien de connexion. Veuillez réessayer.')
+    }
   } finally {
     loading.value = false
   }

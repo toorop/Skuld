@@ -43,8 +43,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /** Connexion par magic link */
+  /** Connexion par magic link — vérifie d'abord que l'email est autorisé */
   async function loginWithMagicLink(email: string) {
+    // Vérifier côté serveur que l'email correspond au propriétaire
+    await api.post('/auth/check-email', { email })
+
     const { error } = await supabase.auth.signInWithOtp({ email })
     if (error) throw error
   }
