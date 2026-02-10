@@ -59,7 +59,7 @@ Pour créer un compte : [supabase.com/dashboard](https://supabase.com/dashboard)
 
 ### Sur votre machine (pour le déploiement)
 
-- **Node.js** >= 18
+- **Node.js** >= 22
 - **npm** >= 9
 
 ## Installation
