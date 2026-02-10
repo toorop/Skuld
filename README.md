@@ -3,7 +3,7 @@
 [![CI](https://github.com/toorop/Skuld/actions/workflows/ci.yml/badge.svg)](https://github.com/toorop/Skuld/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Skuld est une application web **open-source** de gestion pour les **auto-entrepreneurs (micro-entreprises) français**. Self-hosted, single-tenant : une instance = un utilisateur, vos données restent chez vous.
+Skuld est une application web **open-source** de gestion pour les **auto-entrepreneurs (micro-entreprises) français**. Self-hosted, single-tenant : une instance = un utilisateur.
 
 <!-- TODO: ajouter des captures d'écran ici
 ![Dashboard](docs/screenshots/dashboard.png)
