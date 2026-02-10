@@ -80,10 +80,8 @@ npm install
 4. Lancez les migrations SQL pour créer les tables :
 
 ```bash
-# Installer la CLI Supabase si nécessaire
-npm install -g supabase
-
-# Lier votre projet
+# Lier votre projet (la référence se trouve dans l'URL du dashboard Supabase :
+# https://supabase.com/dashboard/project/<ref> — c'est la chaîne après /project/)
 npx supabase link --project-ref VOTRE_REF_PROJET
 
 # Appliquer les migrations
