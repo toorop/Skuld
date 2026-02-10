@@ -95,25 +95,43 @@ npx supabase db push
 
 1. Dans le [dashboard Cloudflare](https://dash.cloudflare.com/), allez dans **R2 > Créer un bucket**.
 2. Nommez-le `skuld-proofs`.
+3. Dans **Emplacement**, sélectionnez **Union européenne (EU)** pour garantir que vos fichiers restent hébergés en Europe (conformité RGPD).
 
 ### 4. Configurer le backend
 
 ```bash
 # Copier et remplir la configuration Wrangler
 cp backend/wrangler.toml.example backend/wrangler.toml
+```
 
-# Définir les secrets (recommandé plutôt que de les mettre dans wrangler.toml)
+Ensuite, définissez les secrets Supabase. Chaque commande vous demandera de coller la valeur correspondante :
+
+```bash
 cd backend
+
+# L'URL de votre projet Supabase (ex: https://abcdefgh.supabase.co)
 npx wrangler secret put SUPABASE_URL
+
+# La clé anon de votre projet (Paramètres > API > anon public)
 npx wrangler secret put SUPABASE_ANON_KEY
+
+# La clé service role (Paramètres > API > service_role — ne jamais exposer côté client)
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-npx wrangler secret put APP_URL
+
 cd ..
 ```
 
-### 5. Configurer le frontend
+### 5. Déployer le backend
 
-Créez un fichier `frontend/.env.production` :
+```bash
+npm run deploy:backend
+```
+
+Notez l'URL du Worker affichée à la fin du déploiement (ex: `https://skuld-api.votre-compte.workers.dev`).
+
+### 6. Configurer et déployer le frontend
+
+Créez un fichier `frontend/.env.production` avec vos valeurs :
 
 ```env
 VITE_SUPABASE_URL=https://votre-projet.supabase.co
@@ -121,21 +139,58 @@ VITE_SUPABASE_ANON_KEY=eyJ...
 VITE_API_URL=https://skuld-api.votre-compte.workers.dev
 ```
 
-### 6. Déployer
+`VITE_API_URL` est l'URL du Worker obtenue à l'étape 5.
 
 ```bash
-# Déployer le backend (Cloudflare Workers)
-npm run deploy:backend
-
-# Construire et déployer le frontend (Cloudflare Pages)
+# Construire le frontend
 npm run build:frontend
-# Puis déployer le dossier frontend/dist via le dashboard Cloudflare Pages
-# ou avec : npx wrangler pages deploy frontend/dist --project-name=skuld
+
+# Déployer sur Cloudflare Pages
+npx wrangler pages deploy frontend/dist --project-name=skuld
 ```
 
-### 7. Première utilisation
+Notez l'URL du frontend affichée à la fin (ex: `https://skuld.pages.dev`).
 
-1. Ouvrez l'URL de votre application.
+### 7. Finaliser la configuration
+
+Définissez le dernier secret du backend — l'URL du frontend déployé à l'étape 6 :
+
+```bash
+cd backend
+npx wrangler secret put APP_URL
+# Collez l'URL de votre frontend (ex: https://skuld.pages.dev)
+cd ..
+```
+
+### 8. Domaine personnalisé (optionnel)
+
+Par défaut, votre application est accessible via les URLs Cloudflare (ex: `skuld.pages.dev`). Si vous possédez un nom de domaine géré par Cloudflare, vous pouvez utiliser vos propres adresses (ex: `app.mondomaine.fr` et `api.mondomaine.fr`).
+
+**Frontend** : dans le [dashboard Cloudflare](https://dash.cloudflare.com/), allez dans **Pages** > votre projet > **Domaines personnalisés** > **Ajouter un domaine personnalisé**. Saisissez le sous-domaine souhaité (ex: `app.mondomaine.fr`). Cloudflare crée automatiquement l'enregistrement DNS.
+
+**Backend** : dans **Workers & Pages** > votre Worker > **Paramètres** > **Domaines et routes** > **Ajouter** > **Domaine personnalisé**. Saisissez le sous-domaine souhaité (ex: `api.mondomaine.fr`).
+
+Ensuite, mettez à jour les URLs :
+
+1. Modifiez `VITE_API_URL` dans `frontend/.env.production` avec la nouvelle URL de l'API, puis reconstruisez et redéployez le frontend :
+
+```bash
+npm run build:frontend
+npx wrangler pages deploy frontend/dist --project-name=skuld
+```
+
+2. Mettez à jour le secret `APP_URL` du backend avec la nouvelle URL du frontend :
+
+```bash
+cd backend
+npx wrangler secret put APP_URL
+# Collez la nouvelle URL (ex: https://app.mondomaine.fr)
+cd ..
+```
+
+### 9. Première utilisation
+
+1. Ouvrez l'URL de votre application (celle de l'étape 6).
 2. Créez votre compte (un seul compte par instance).
 3. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
 4. C'est prêt !
