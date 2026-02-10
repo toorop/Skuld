@@ -97,11 +97,14 @@ npx supabase db push
 2. Nommez-le `skuld-proofs`.
 3. Dans **Emplacement**, sélectionnez **Union européenne (EU)** pour garantir que vos fichiers restent hébergés en Europe (conformité RGPD).
 
-### 4. Configurer le backend
+### 4. Configurer et déployer le backend
 
 ```bash
 # Copier et remplir la configuration Wrangler
 cp backend/wrangler.toml.example backend/wrangler.toml
+
+# Premier déploiement (crée le Worker sur Cloudflare)
+npm run deploy:backend
 ```
 
 Ensuite, définissez les secrets Supabase. Chaque commande vous demandera de coller la valeur correspondante :
@@ -121,15 +124,9 @@ npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 cd ..
 ```
 
-### 5. Déployer le backend
+Notez l'URL du Worker affichée lors du déploiement (ex: `https://skuld-api.votre-compte.workers.dev`).
 
-```bash
-npm run deploy:backend
-```
-
-Notez l'URL du Worker affichée à la fin du déploiement (ex: `https://skuld-api.votre-compte.workers.dev`).
-
-### 6. Configurer et déployer le frontend
+### 5. Configurer et déployer le frontend
 
 Créez un fichier `frontend/.env.production` avec vos valeurs :
 
@@ -151,9 +148,9 @@ npx wrangler pages deploy frontend/dist --project-name=skuld
 
 Notez l'URL du frontend affichée à la fin (ex: `https://skuld.pages.dev`).
 
-### 7. Finaliser la configuration
+### 6. Finaliser la configuration
 
-Définissez le dernier secret du backend — l'URL du frontend déployé à l'étape 6 :
+Définissez le dernier secret du backend — l'URL du frontend déployé à l'étape 5 :
 
 ```bash
 cd backend
@@ -162,7 +159,7 @@ npx wrangler secret put APP_URL
 cd ..
 ```
 
-### 8. Domaine personnalisé (optionnel)
+### 7. Domaine personnalisé (optionnel)
 
 Par défaut, votre application est accessible via les URLs Cloudflare (ex: `skuld.pages.dev`). Si vous possédez un nom de domaine géré par Cloudflare, vous pouvez utiliser vos propres adresses (ex: `app.mondomaine.fr` et `api.mondomaine.fr`).
 
@@ -188,9 +185,9 @@ npx wrangler secret put APP_URL
 cd ..
 ```
 
-### 9. Première utilisation
+### 8. Première utilisation
 
-1. Ouvrez l'URL de votre application (celle de l'étape 6).
+1. Ouvrez l'URL de votre application (celle de l'étape 5).
 2. Créez votre compte (un seul compte par instance).
 3. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
 4. C'est prêt !
