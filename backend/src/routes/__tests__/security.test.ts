@@ -29,7 +29,8 @@ const testEnv: Env = {
 
 /** Crée un mock Supabase chaînable */
 function createMockSupabase() {
-  const chain: Record<string, ReturnType<typeof vi.fn>> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chain: Record<string, any> = {}
 
   const chainMethods = ['from', 'select', 'insert', 'update', 'delete', 'eq', 'neq', 'gte', 'lte', 'order', 'range']
   for (const method of chainMethods) {
