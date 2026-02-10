@@ -13,6 +13,10 @@ dist/
 # Cloudflare
 .wrangler/
 .dev.vars
+wrangler.toml
+
+# Production
+.env.production
 
 # IDE
 .vscode/

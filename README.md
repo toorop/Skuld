@@ -199,6 +199,30 @@ cd ..
 4. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
 5. C'est prêt !
 
+## Mise à jour
+
+Pour mettre à jour votre instance après une nouvelle version :
+
+```bash
+# Récupérer les dernières modifications
+git pull
+
+# Installer les éventuelles nouvelles dépendances
+npm install
+
+# Appliquer les éventuelles nouvelles migrations de base de données
+npx supabase db push
+
+# Redéployer le backend
+npm run deploy:backend
+
+# Reconstruire et redéployer le frontend
+npm run build:frontend
+npx wrangler pages deploy frontend/dist --project-name=skuld
+```
+
+Vos fichiers de configuration locaux (`backend/wrangler.toml`, `frontend/.env.production`) ne sont pas suivis par Git et ne seront pas affectés par la mise à jour.
+
 ## Développement local
 
 ```bash
