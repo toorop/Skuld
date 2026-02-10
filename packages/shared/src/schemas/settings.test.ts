@@ -6,6 +6,10 @@ describe('siretSchema', () => {
     expect(siretSchema.parse('12345678901234')).toBe('12345678901234')
   })
 
+  it('accepte un SIRET avec des espaces', () => {
+    expect(siretSchema.parse('123 456 789 01234')).toBe('12345678901234')
+  })
+
   it('rejette un SIRET trop court', () => {
     expect(() => siretSchema.parse('1234567890123')).toThrow('14 chiffres')
   })
@@ -87,6 +91,16 @@ describe('settingsCreateSchema', () => {
     expect(result.bankIban).toBe('FR7612345678901234567890123')
     expect(result.bankBic).toBe('BNPAFRPP')
     expect(result.declarationFrequency).toBe('QUARTERLY')
+  })
+
+  it('accepte des données sans IBAN ni BIC (chaînes vides)', () => {
+    const result = settingsCreateSchema.parse({
+      ...validSettings,
+      bankIban: '',
+      bankBic: '',
+    })
+    expect(result.bankIban).toBeNull()
+    expect(result.bankBic).toBeNull()
   })
 
   it('rejette un email invalide', () => {

@@ -8,7 +8,8 @@ import { ActivityType, DeclarationFrequency, PaymentMethod } from '../types/enum
  */
 const siretSchema = z
   .string()
-  .regex(/^\d{14}$/, 'Le numéro SIRET doit contenir exactement 14 chiffres')
+  .transform((v) => v.replace(/\s/g, ''))
+  .pipe(z.string().regex(/^\d{14}$/, 'Le numéro SIRET doit contenir exactement 14 chiffres'))
 
 /** Validation du code postal français (5 chiffres) */
 const postalCodeSchema = z
@@ -52,8 +53,8 @@ export const settingsCreateSchema = z.object({
   city: z.string().min(1, 'La ville est obligatoire').max(200),
   phone: z.string().max(20).nullish(),
   email: z.string().email('Adresse email invalide'),
-  bankIban: ibanSchema.nullish(),
-  bankBic: bicSchema.nullish(),
+  bankIban: z.union([ibanSchema, z.literal('')]).nullish().transform((v) => v || null),
+  bankBic: z.union([bicSchema, z.literal('')]).nullish().transform((v) => v || null),
   vatExemptText: z.string().max(500).optional(),
   activityStartDate: z.string().date('Date invalide (format attendu : AAAA-MM-JJ)').nullish(),
   declarationFrequency: z.nativeEnum(DeclarationFrequency).optional(),
