@@ -15,3 +15,5 @@ compatibility_date = "2025-01-01"
 [[r2_buckets]]
 binding = "R2_BUCKET"
 bucket_name = "skuld-proofs"
+# Si vous avez créé le bucket avec la juridiction "Union européenne (EU)" (recommandé)
+jurisdiction = "eu"
