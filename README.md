@@ -77,8 +77,8 @@ npm install
 1. Allez sur [supabase.com/dashboard](https://supabase.com/dashboard) et créez un nouveau projet.
 2. Allez dans **Paramètres > API** et notez :
    - L'**URL du projet** (section "Project URL")
-   - La **Publishable Key** (clé publique, commence par `sb_publishable_...`)
-   - La **Secret Key** (cliquez sur "Reveal" pour l'afficher — ne jamais l'exposer côté client)
+   - La clé **anon public** (section "Project API keys")
+   - La clé **service_role** (même section — cliquez sur "Reveal" pour l'afficher, ne jamais l'exposer côté client)
 4. Notez la **référence du projet** : c'est la chaîne de caractères visible dans l'URL du dashboard, juste après `/project/`. Par exemple, si l'URL est `https://supabase.com/dashboard/project/abcdefghijklmnop`, la référence est `abcdefghijklmnop`.
 5. Lancez les commandes suivantes pour créer les tables :
 
@@ -117,10 +117,10 @@ cd backend
 # L'URL de votre projet Supabase (ex: https://abcdefgh.supabase.co)
 npx wrangler secret put SUPABASE_URL
 
-# La Publishable Key de votre projet
+# La clé anon public (Paramètres > API > Project API keys)
 npx wrangler secret put SUPABASE_ANON_KEY
 
-# La Secret Key de votre projet (cliquez "Reveal" dans le dashboard pour la copier)
+# La clé service_role (même section — cliquez "Reveal" pour la copier)
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 
 cd ..
@@ -134,12 +134,12 @@ Créez un fichier `frontend/.env.production` avec vos valeurs :
 
 ```env
 VITE_SUPABASE_URL=https://votre-projet.supabase.co
-VITE_SUPABASE_ANON_KEY=sb_publishable_...
+VITE_SUPABASE_ANON_KEY=eyJ...
 VITE_API_URL=https://skuld-api.votre-compte.workers.dev
 ```
 
 - `VITE_SUPABASE_URL` : l'URL du projet (étape 2)
-- `VITE_SUPABASE_ANON_KEY` : la Publishable Key (étape 2)
+- `VITE_SUPABASE_ANON_KEY` : la clé anon public (étape 2)
 - `VITE_API_URL` : l'URL du Worker obtenue à l'étape 4
 
 `VITE_API_URL` est l'URL du Worker obtenue à l'étape 5.
