@@ -79,7 +79,8 @@ npm install
    - L'**URL du projet** (section "Project URL")
    - La clé **anon public** (section "Project API keys")
    - La clé **service_role** (même section — cliquez sur "Reveal" pour l'afficher, ne jamais l'exposer côté client)
-4. Notez la **référence du projet** : c'est la chaîne de caractères visible dans l'URL du dashboard, juste après `/project/`. Par exemple, si l'URL est `https://supabase.com/dashboard/project/abcdefghijklmnop`, la référence est `abcdefghijklmnop`.
+3. Notez la **référence du projet** : c'est la chaîne de caractères visible dans l'URL du dashboard, juste après `/project/`. Par exemple, si l'URL est `https://supabase.com/dashboard/project/abcdefghijklmnop`, la référence est `abcdefghijklmnop`.
+4. Configurez l'URL de redirection : allez dans **Authentication** > **URL Configuration** et remplacez la **Site URL** par l'URL de votre frontend (vous la connaîtrez à l'étape 5 — revenez ici la renseigner après le premier déploiement du frontend).
 5. Lancez les commandes suivantes pour créer les tables :
 
 ```bash
@@ -142,13 +143,12 @@ VITE_API_URL=https://skuld-api.votre-compte.workers.dev
 - `VITE_SUPABASE_ANON_KEY` : la clé anon public (étape 2)
 - `VITE_API_URL` : l'URL du Worker obtenue à l'étape 4
 
-`VITE_API_URL` est l'URL du Worker obtenue à l'étape 5.
-
 ```bash
 # Construire le frontend
 npm run build:frontend
 
-# Déployer sur Cloudflare Pages
+# Déployer sur Cloudflare Pages (au premier lancement, Wrangler proposera de
+# créer le projet — confirmez et laissez "main" comme branche de production)
 npx wrangler pages deploy frontend/dist --project-name=skuld
 ```
 
@@ -194,9 +194,10 @@ cd ..
 ### 8. Première utilisation
 
 1. Ouvrez l'URL de votre application (celle de l'étape 5).
-2. Créez votre compte (un seul compte par instance).
-3. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
-4. C'est prêt !
+2. Sur la page de login, saisissez votre email et cliquez sur **« Recevoir un lien de connexion »** (ne remplissez pas le mot de passe — la création de compte se fait via magic link).
+3. Cliquez sur le lien reçu par email. Vous serez redirigé vers le formulaire de configuration initiale.
+4. Remplissez vos informations d'auto-entrepreneur (SIRET, adresse, activité, etc.).
+5. C'est prêt !
 
 ## Développement local
 

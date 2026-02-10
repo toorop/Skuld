@@ -138,7 +138,7 @@ router.beforeEach(async (to) => {
   }
 
   // Setup requis mais pas terminé → setup
-  if (requiresSetup && auth.setupComplete === false) {
+  if (requiresSetup && !auth.setupComplete) {
     return { name: 'setup' }
   }
 

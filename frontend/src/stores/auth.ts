@@ -24,9 +24,12 @@ export const useAuthStore = defineStore('auth', () => {
       await checkSetup()
     }
 
-    supabase.auth.onAuthStateChange((_event, s) => {
+    supabase.auth.onAuthStateChange(async (_event, s) => {
       session.value = s
       user.value = s?.user ?? null
+      if (s && setupComplete.value === null) {
+        await checkSetup()
+      }
     })
   }
 
