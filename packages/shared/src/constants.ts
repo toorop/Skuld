@@ -27,6 +27,9 @@ export const MAX_FILE_SIZE = 5 * 1024 * 1024
 /** Taille maximale totale par instance en octets (500 Mo) */
 export const MAX_TOTAL_STORAGE = 500 * 1024 * 1024
 
+/** Nombre maximal de justificatifs par transaction */
+export const MAX_ATTACHMENTS_PER_TRANSACTION = 10
+
 // --- Pagination ---
 
 export const DEFAULT_PAGE_SIZE = 20

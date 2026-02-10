@@ -6,6 +6,7 @@ import { useToast } from '@/composables/useToast'
 import { ApiError } from '@/lib/api'
 import TransactionForm from '@/components/TransactionForm.vue'
 import ProofBundleComponent from '@/components/ProofBundle.vue'
+import FileUploader from '@/components/FileUploader.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
@@ -32,12 +33,31 @@ onMounted(() => {
 
 // --- Actions CRUD ---
 
-async function handleSubmit(data: Record<string, unknown>) {
+async function handleSubmit(data: Record<string, unknown>, files: File[]) {
   saving.value = true
   try {
     await store.updateTransaction(id.value, data)
-    toast.success('Transaction enregistrée.')
+
+    // Uploader les nouveaux justificatifs en parallèle
+    if (files.length > 0) {
+      const results = await Promise.allSettled(
+        files.map((f) => store.uploadAttachment(id.value, f)),
+      )
+      const failures = results.filter((r) => r.status === 'rejected')
+      if (failures.length > 0) {
+        toast.error(
+          `Transaction enregistrée, mais ${failures.length} justificatif(s) n'ont pas pu être envoyé(s).`,
+        )
+      } else {
+        toast.success('Transaction enregistrée.')
+      }
+    } else {
+      toast.success('Transaction enregistrée.')
+    }
+
     editing.value = false
+    // Recharger pour récupérer les nouveaux attachments
+    store.fetchTransaction(id.value)
   } catch (err) {
     if (err instanceof ApiError) toast.error(err.message)
     else toast.error('Une erreur est survenue.')
@@ -63,6 +83,11 @@ async function confirmDelete() {
 
 function onProofBundleUpdated() {
   // Recharger la transaction pour mettre à jour le bundle
+  store.fetchTransaction(id.value)
+}
+
+function onAttachmentUpdated() {
+  // Recharger la transaction pour mettre à jour les justificatifs
   store.fetchTransaction(id.value)
 }
 
@@ -214,6 +239,19 @@ function directionBadgeClass(direction: string) {
             :transaction-id="tx.id"
             :bundle="tx.proofBundle as any"
             @updated="onProofBundleUpdated"
+          />
+        </div>
+
+        <!-- Section Justificatifs (dépenses uniquement) -->
+        <div
+          v-if="tx.direction === 'EXPENSE'"
+          class="rounded-xl bg-white p-6 shadow-sm"
+        >
+          <h2 class="mb-4 text-lg font-semibold text-gray-900">Justificatifs</h2>
+          <FileUploader
+            :transaction-id="tx.id"
+            :existing-attachments="tx.attachments ?? []"
+            @updated="onAttachmentUpdated"
           />
         </div>
       </div>

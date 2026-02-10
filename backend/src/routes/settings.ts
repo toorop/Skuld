@@ -110,7 +110,7 @@ settings.post('/logo', async (c) => {
 settings.get('/export', async (c) => {
   const supabase = c.get('supabase')
 
-  const [settingsRes, contactsRes, documentsRes, linesRes, transactionsRes, bundlesRes, proofsRes] =
+  const [settingsRes, contactsRes, documentsRes, linesRes, transactionsRes, bundlesRes, proofsRes, attachmentsRes] =
     await Promise.all([
       supabase.from('settings').select('*').single(),
       supabase.from('contacts').select('*'),
@@ -119,6 +119,7 @@ settings.get('/export', async (c) => {
       supabase.from('transactions').select('*'),
       supabase.from('proof_bundles').select('*'),
       supabase.from('proofs').select('*'),
+      supabase.from('attachments').select('*'),
     ])
 
   const exportData = {
@@ -130,6 +131,7 @@ settings.get('/export', async (c) => {
     transactions: transactionsRes.data ?? [],
     proofBundles: bundlesRes.data ?? [],
     proofs: proofsRes.data ?? [],
+    attachments: attachmentsRes.data ?? [],
   }
 
   return c.json(exportData)
@@ -150,6 +152,7 @@ settings.delete('/account', async (c) => {
   // Supprimer les données dans l'ordre (respect des FK)
   await adminClient.from('proofs').delete().neq('id', '')
   await adminClient.from('proof_bundles').delete().neq('id', '')
+  await adminClient.from('attachments').delete().neq('id', '')
   await adminClient.from('transactions').delete().neq('id', '')
   await adminClient.from('document_lines').delete().neq('id', '')
   await adminClient.from('documents').delete().neq('id', '')

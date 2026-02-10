@@ -9,6 +9,7 @@ import { contacts } from './routes/contacts'
 import { documents } from './routes/documents'
 import { transactions } from './routes/transactions'
 import { proofs } from './routes/proofs'
+import { attachments } from './routes/attachments'
 import { dashboard } from './routes/dashboard'
 
 const app = new Hono<{ Bindings: Env; Variables: AppVariables }>()
@@ -30,6 +31,7 @@ app.route('/api/contacts', contacts)
 app.route('/api/documents', documents)
 app.route('/api/transactions', transactions)
 app.route('/api/proofs', proofs)
+app.route('/api/attachments', attachments)
 app.route('/api/dashboard', dashboard)
 
 // 404 pour les routes non trouvées

@@ -12,11 +12,28 @@ const toast = useToast()
 
 const loading = ref(false)
 
-async function handleSubmit(data: Record<string, unknown>) {
+async function handleSubmit(data: Record<string, unknown>, files: File[]) {
   loading.value = true
   try {
     const tx = await store.createTransaction(data)
-    toast.success('Transaction enregistrée.')
+
+    // Uploader les justificatifs en parallèle
+    if (files.length > 0) {
+      const results = await Promise.allSettled(
+        files.map((f) => store.uploadAttachment(tx.id, f)),
+      )
+      const failures = results.filter((r) => r.status === 'rejected')
+      if (failures.length > 0) {
+        toast.error(
+          `Transaction créée, mais ${failures.length} justificatif(s) n'ont pas pu être envoyé(s).`,
+        )
+      } else {
+        toast.success('Transaction enregistrée.')
+      }
+    } else {
+      toast.success('Transaction enregistrée.')
+    }
+
     router.push({ name: 'transaction-detail', params: { id: tx.id } })
   } catch (err) {
     if (err instanceof ApiError) {

@@ -16,7 +16,7 @@ transactions.get('/', async (c) => {
 
   let request = supabase
     .from('transactions')
-    .select('*, contacts(display_name), proof_bundles(is_complete)', { count: 'exact' })
+    .select('*, contacts(display_name), proof_bundles(is_complete), attachments(id)', { count: 'exact' })
 
   // Filtres
   if (query.direction) request = request.eq('direction', query.direction)
@@ -89,7 +89,7 @@ transactions.get('/:id', async (c) => {
 
   const { data, error } = await supabase
     .from('transactions')
-    .select('*, contacts(*), proof_bundles(*, proofs(*))')
+    .select('*, contacts(*), proof_bundles(*, proofs(*)), attachments(*)')
     .eq('id', id)
     .single()
 
@@ -151,6 +151,16 @@ transactions.delete('/:id', async (c) => {
   if (bundle?.proofs) {
     const proofs = bundle.proofs as Array<{ file_url: string }>
     await Promise.all(proofs.map((p) => bucket.delete(p.file_url)))
+  }
+
+  // Supprimer les fichiers R2 liés aux justificatifs
+  const { data: txAttachments } = await supabase
+    .from('attachments')
+    .select('file_url')
+    .eq('transaction_id', id)
+
+  if (txAttachments && txAttachments.length > 0) {
+    await Promise.all(txAttachments.map((a: { file_url: string }) => bucket.delete(a.file_url)))
   }
 
   const { error } = await supabase

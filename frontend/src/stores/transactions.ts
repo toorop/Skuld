@@ -5,6 +5,7 @@ import { mapContact, type DbContact } from './contacts'
 import type {
   Transaction,
   TransactionWithProofs,
+  Attachment,
   ProofBundle,
   Proof,
   PaginationMeta,
@@ -35,6 +36,16 @@ interface DbProofBundle {
   proofs?: DbProof[]
 }
 
+interface DbAttachment {
+  id: string
+  transaction_id: string
+  file_url: string
+  file_name: string
+  file_size: number
+  mime_type: string
+  uploaded_at: string
+}
+
 interface DbTransaction {
   id: string
   date: string
@@ -51,6 +62,7 @@ interface DbTransaction {
   updated_at: string
   contacts?: Record<string, unknown> | null
   proof_bundles?: DbProofBundle | null
+  attachments?: DbAttachment[] | null
 }
 
 // --- Mappers ---
@@ -60,6 +72,18 @@ function mapProof(raw: DbProof): Proof {
     id: raw.id,
     bundleId: raw.bundle_id,
     type: raw.type as Proof['type'],
+    fileUrl: raw.file_url,
+    fileName: raw.file_name,
+    fileSize: raw.file_size,
+    mimeType: raw.mime_type,
+    uploadedAt: raw.uploaded_at,
+  }
+}
+
+function mapAttachment(raw: DbAttachment): Attachment {
+  return {
+    id: raw.id,
+    transactionId: raw.transaction_id,
     fileUrl: raw.file_url,
     fileName: raw.file_name,
     fileSize: raw.file_size,
@@ -104,6 +128,7 @@ function mapTransaction(raw: DbTransaction): Transaction {
 export interface TransactionListItem extends Transaction {
   contactName: string
   proofComplete: boolean | null
+  attachmentCount: number
 }
 
 function mapTransactionListItem(raw: DbTransaction): TransactionListItem {
@@ -113,6 +138,7 @@ function mapTransactionListItem(raw: DbTransaction): TransactionListItem {
   tx.proofComplete = raw.proof_bundles
     ? (raw.proof_bundles as { is_complete?: boolean }).is_complete ?? null
     : null
+  tx.attachmentCount = Array.isArray(raw.attachments) ? raw.attachments.length : 0
   return tx
 }
 
@@ -124,6 +150,7 @@ function mapTransactionWithProofs(raw: DbTransaction): TransactionWithProofs {
   if (raw.contacts && 'id' in raw.contacts) {
     tx.contact = mapContact(raw.contacts as unknown as DbContact)
   }
+  tx.attachments = (raw.attachments ?? []).map(mapAttachment)
   return tx
 }
 
@@ -234,6 +261,34 @@ export const useTransactionsStore = defineStore('transactions', () => {
     URL.revokeObjectURL(url)
   }
 
+  // --- Actions justificatifs ---
+
+  async function uploadAttachment(
+    transactionId: string,
+    file: File,
+  ): Promise<Attachment> {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('transaction_id', transactionId)
+    const res = await api.upload<DbAttachment>('/attachments/upload', formData)
+    return mapAttachment(res.data)
+  }
+
+  async function deleteAttachment(id: string) {
+    await api.delete(`/attachments/${id}`)
+  }
+
+  async function downloadAttachment(id: string, fileName: string) {
+    const res = await api.download(`/attachments/${id}/download`)
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = fileName
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   async function generateCessionPdf(transactionId: string): Promise<Proof> {
     const res = await api.post<DbProof>(
       `/proofs/cession-pdf/${transactionId}`,
@@ -255,5 +310,8 @@ export const useTransactionsStore = defineStore('transactions', () => {
     uploadProof,
     downloadProof,
     generateCessionPdf,
+    uploadAttachment,
+    deleteAttachment,
+    downloadAttachment,
   }
 })

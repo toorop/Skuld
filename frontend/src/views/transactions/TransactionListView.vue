@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   BanknotesIcon,
+  PaperClipIcon,
 } from '@heroicons/vue/24/outline'
 
 const directionLabels: Record<string, string> = { INCOME: 'Recette', EXPENSE: 'Dépense' }
@@ -205,8 +206,18 @@ function formatDate(iso: string): string {
               <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-900">
                 {{ formatDate(tx.date) }}
               </td>
-              <td class="max-w-xs truncate px-4 py-3 text-sm font-medium text-gray-900">
-                {{ tx.label }}
+              <td class="max-w-xs px-4 py-3 text-sm font-medium text-gray-900">
+                <div class="flex items-center gap-1.5">
+                  <span class="truncate">{{ tx.label }}</span>
+                  <span
+                    v-if="tx.attachmentCount > 0"
+                    class="inline-flex shrink-0 items-center gap-0.5 text-gray-400"
+                    :title="`${tx.attachmentCount} justificatif(s)`"
+                  >
+                    <PaperClipIcon class="h-3.5 w-3.5" />
+                    <span class="text-xs">{{ tx.attachmentCount }}</span>
+                  </span>
+                </div>
               </td>
               <td class="whitespace-nowrap px-4 py-3 text-sm">
                 <span

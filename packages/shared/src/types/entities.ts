@@ -114,10 +114,11 @@ export interface Transaction {
   updatedAt: string
 }
 
-/** Transaction avec son dossier de preuves */
+/** Transaction avec son dossier de preuves et justificatifs */
 export interface TransactionWithProofs extends Transaction {
   proofBundle?: ProofBundle
   contact?: Contact
+  attachments?: Attachment[]
 }
 
 /** Dossier de preuves (achat occasion) */
@@ -137,6 +138,17 @@ export interface Proof {
   id: string
   bundleId: string
   type: ProofType
+  fileUrl: string
+  fileName: string
+  fileSize: number
+  mimeType: string
+  uploadedAt: string
+}
+
+/** Justificatif attaché directement à une transaction */
+export interface Attachment {
+  id: string
+  transactionId: string
   fileUrl: string
   fileName: string
   fileSize: number

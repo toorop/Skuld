@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from 'vue'
 import { transactionCreateSchema } from '@skuld/shared'
 import type { Transaction } from '@skuld/shared'
 import { api } from '@/lib/api'
+import FileUploader from '@/components/FileUploader.vue'
 
 const props = defineProps<{
   transaction?: Transaction | null
@@ -10,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  submit: [data: Record<string, unknown>]
+  submit: [data: Record<string, unknown>, files: File[]]
   cancel: []
 }>()
 
@@ -45,6 +46,7 @@ const form = ref({
   notes: '',
 })
 
+const pendingFiles = ref<File[]>([])
 const errors = ref<Record<string, string>>({})
 
 // Mode édition : pré-remplir depuis la transaction
@@ -103,7 +105,7 @@ function handleSubmit() {
     return
   }
 
-  emit('submit', data)
+  emit('submit', data, pendingFiles.value)
 }
 </script>
 
@@ -239,6 +241,16 @@ function handleSubmit() {
         />
         Achat d'occasion
       </label>
+    </div>
+
+    <!-- Justificatifs (dépenses uniquement) -->
+    <div v-if="form.direction === 'EXPENSE'">
+      <label class="block text-sm font-medium text-gray-700">Justificatifs</label>
+      <div class="mt-1">
+        <FileUploader
+          v-model:pending-files="pendingFiles"
+        />
+      </div>
     </div>
 
     <!-- Notes -->
