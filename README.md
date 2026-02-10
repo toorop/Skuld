@@ -77,14 +77,17 @@ npm install
 1. Allez sur [supabase.com/dashboard](https://supabase.com/dashboard) et créez un nouveau projet.
 2. Notez l'**URL du projet** et la **clé anon** (dans Paramètres > API).
 3. Notez également la **clé service role** (même page, section "service_role key" — ne jamais l'exposer côté client).
-4. Lancez les migrations SQL pour créer les tables :
+4. Notez la **référence du projet** : c'est la chaîne de caractères visible dans l'URL du dashboard, juste après `/project/`. Par exemple, si l'URL est `https://supabase.com/dashboard/project/abcdefghijklmnop`, la référence est `abcdefghijklmnop`.
+5. Lancez les commandes suivantes pour créer les tables :
 
 ```bash
-# Lier votre projet (la référence se trouve dans l'URL du dashboard Supabase :
-# https://supabase.com/dashboard/project/<ref> — c'est la chaîne après /project/)
+# Se connecter à Supabase (ouvre le navigateur pour autoriser l'accès)
+npx supabase login
+
+# Lier votre projet (remplacez par votre référence notée à l'étape 4)
 npx supabase link --project-ref VOTRE_REF_PROJET
 
-# Appliquer les migrations
+# Appliquer les migrations (crée toutes les tables nécessaires)
 npx supabase db push
 ```
 
