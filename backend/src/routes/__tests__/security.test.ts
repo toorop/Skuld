@@ -147,9 +147,9 @@ describe('Sécurité — Upload preuves', () => {
 
   it('POST /api/proofs/upload → 422 avec MIME interdit (text/plain)', async () => {
     const app = await createProofsApp(mockSupabase)
-    const file = new File(['contenu texte'], 'test.txt', { type: 'text/plain' })
+    const blob = new Blob(['contenu texte'], { type: 'text/plain' })
     const form = new FormData()
-    form.append('file', file)
+    form.append('file', blob, 'test.txt')
     form.append('bundle_id', 'bundle-1')
     form.append('type', 'SCREENSHOT_AD')
 
@@ -169,9 +169,9 @@ describe('Sécurité — Upload preuves', () => {
   it('POST /api/proofs/upload → 422 avec fichier trop gros (> 5 Mo)', async () => {
     // Créer un fichier de 6 Mo
     const bigContent = new Uint8Array(6 * 1024 * 1024)
-    const file = new File([bigContent], 'photo.jpg', { type: 'image/jpeg' })
+    const blob = new Blob([bigContent], { type: 'image/jpeg' })
     const form = new FormData()
-    form.append('file', file)
+    form.append('file', blob, 'photo.jpg')
     form.append('bundle_id', 'bundle-1')
     form.append('type', 'SCREENSHOT_AD')
 
@@ -190,9 +190,9 @@ describe('Sécurité — Upload preuves', () => {
   })
 
   it('POST /api/proofs/upload → 201 avec fichier valide (JPEG)', async () => {
-    const file = new File([new Uint8Array([0xFF, 0xD8, 0xFF])], 'photo.jpg', { type: 'image/jpeg' })
+    const blob = new Blob([new Uint8Array([0xFF, 0xD8, 0xFF])], { type: 'image/jpeg' })
     const form = new FormData()
-    form.append('file', file)
+    form.append('file', blob, 'photo.jpg')
     form.append('bundle_id', 'bundle-1')
     form.append('type', 'SCREENSHOT_AD')
 
@@ -255,9 +255,9 @@ describe('Sécurité — Upload logo', () => {
   })
 
   it('POST /api/settings/logo → 422 avec MIME interdit (application/pdf)', async () => {
-    const file = new File([new Uint8Array([0x25, 0x50, 0x44, 0x46])], 'doc.pdf', { type: 'application/pdf' })
+    const blob = new Blob([new Uint8Array([0x25, 0x50, 0x44, 0x46])], { type: 'application/pdf' })
     const form = new FormData()
-    form.append('file', file)
+    form.append('file', blob, 'doc.pdf')
 
     const app = await createSettingsApp(mockSupabase)
     const res = await app.request('/api/settings/logo', {
@@ -272,9 +272,9 @@ describe('Sécurité — Upload logo', () => {
 
   it('POST /api/settings/logo → 422 avec fichier trop gros (> 2 Mo)', async () => {
     const bigContent = new Uint8Array(3 * 1024 * 1024)
-    const file = new File([bigContent], 'logo.png', { type: 'image/png' })
+    const blob = new Blob([bigContent], { type: 'image/png' })
     const form = new FormData()
-    form.append('file', file)
+    form.append('file', blob, 'logo.png')
 
     const app = await createSettingsApp(mockSupabase)
     const res = await app.request('/api/settings/logo', {
@@ -288,9 +288,9 @@ describe('Sécurité — Upload logo', () => {
   })
 
   it('POST /api/settings/logo → 200 avec fichier valide (PNG)', async () => {
-    const file = new File([new Uint8Array([0x89, 0x50, 0x4E, 0x47])], 'logo.png', { type: 'image/png' })
+    const blob = new Blob([new Uint8Array([0x89, 0x50, 0x4E, 0x47])], { type: 'image/png' })
     const form = new FormData()
-    form.append('file', file)
+    form.append('file', blob, 'logo.png')
 
     const settingsData = { id: 'settings-1', logo_url: 'logos/test-user-id/logo.png' }
     mockSupabase.single.mockResolvedValueOnce({ data: settingsData, error: null })
